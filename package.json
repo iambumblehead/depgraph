@@ -1,0 +1,38 @@
+{
+  "name": "depgraph",
+  "version": "0.0.1",
+  "license" : "MIT",
+  "readmeFilename": "README.md",
+  "description": "generate a full dependency graph or tree of nodes from a given file",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iambumblehead/depgraph.git"
+  },
+  "keywords": [
+    "dependency",
+    "dependencies",
+    "dependency tree",    
+    "dependency graph",
+    "graph",
+    "concatenate",
+    "bundle",
+    "commonjs"
+  ],
+  "dependencies": {
+    "fnguard" : "~0.6.x",
+    "detective" : "~4.1.x",
+    "resolve" : "~1.1.x",
+    "resolveuid" : "~0.0.x",
+    "resolvewith" : "~0.0.x",    
+    "moduletype" : "~0.0.x",
+    "immutable" : "3.7.4",
+    "archy" : "1.0.x"
+  },
+  "devDependencies" : {
+    "jasmine-node" : "~1.14.x"
+  },
+  "scripts" : {
+    "test" : "node node_modules/jasmine-node/bin/jasmine-node --verbose test/",
+    "start" : "node test/testrun.js"
+  }
+}
