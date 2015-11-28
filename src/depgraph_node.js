@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2015.11.24-01:55:21 (last modified)
+// Timestamp: 2015.11.27-23:54:27 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -93,7 +93,7 @@ var depgraph_node = module.exports = (function (o) {
 
   o.walkbeginfile = function (filepath, accum, iswalkcontinuefn, accumfn, accumcompletefn) {
     o.get_fromfilepath(filepath, function (err, node) {
-      if (err) return (err);
+      if (err) return accumcompletefn(err);
 
       return o.walkbegin(node, accum, iswalkcontinuefn, accumfn, accumcompletefn);
     });
