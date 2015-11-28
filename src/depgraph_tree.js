@@ -1,5 +1,5 @@
 // Filename: depgraph_tree.js  
-// Timestamp: 2015.11.24-01:21:37 (last modified)
+// Timestamp: 2015.11.28-11:49:33 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 //
 // full tree construction is impossible when circular references exist, the tree
@@ -44,6 +44,10 @@ var depgraph_tree = module.exports = (function (o) {
       }).toJS());
   };
 
+  o.getfromgraphsmall = function (graph) {
+    return o.filtered(o.getfromgraph(graph), []);
+  };
+
   o.getfromseedfile = function (filepath, fn) {
     depgraph_graph.getfromseedfile(filepath, function (err, graph) {
       if (err) return fn(err);
@@ -53,11 +57,11 @@ var depgraph_tree = module.exports = (function (o) {
   };
 
   o.getfromseedfilesmall = function (filepath, fn) {
-    o.getfromseedfile(filepath, function (err, tree) {
+    depgraph_graph.getfromseedfile(filepath, function (err, graph) {
       if (err) return fn(err);
 
-      fn(null, o.filtered(tree, []));      
-    });
+      fn(null, o.getfromgraphsmall(graph));
+    });    
   };
   
   o.filtered = function (tree, arr) {

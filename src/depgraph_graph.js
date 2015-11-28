@@ -1,5 +1,5 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.11.28-00:43:49 (last modified)
+// Timestamp: 2015.11.28-14:31:57 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var immutable = require('immutable'),
@@ -12,7 +12,8 @@ var depgraph_graph = module.exports = (function (o) {
   };
 
   o.setnode = function (graph, node, pnode, refname) {
-    var graph_final = graph.set(node.get("uid"), node);
+    var uid = node.get('uid'),
+        graph_final = graph.has(uid) ? graph : graph.set(uid, node);    
 
     if (pnode && refname) {
       if (!graph.has(pnode.get("uid"))) {
