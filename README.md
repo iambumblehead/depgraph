@@ -18,11 +18,11 @@ depgraph is similar to [module-deps][2], a popular package by Substack and it us
 
 ---------------------------------------------------------
 
-A sample graph, tree and dependency-ordered array are seen below, with example calls that are found in the unit tests.
-
-The "inarr" of each node references dependent nodes. The "outarr" references depedency nodes.
+A sample graph, tree and dependency-ordered array are seen using example calls below found in the unit tests.
 
 ## Graph
+
+For each graph node, "inarr" references dependent nodes and "outarr" references depedency nodes.
 
 ```javascript
 depgraph.graph.getfromseedfile('./test/files/root.js', function (err, graph) {
