@@ -1,5 +1,5 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.11.24-02:49:40 (last modified)
+// Timestamp: 2015.11.28-00:43:49 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var immutable = require('immutable'),

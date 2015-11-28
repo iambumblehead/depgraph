@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2015.11.28-00:37:28 (last modified)
+// Timestamp: 2015.11.28-00:43:19 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -64,13 +64,15 @@ var depgraph_node = module.exports = (function (o) {
         !resolvewith.iscoremodule(deparr[0])) {
 
       if (!(depfilepath = resolvewith(deparr[0], nodefilepath))) {
-        throw new Error('dep not found, "' + deparr[0] + '": ' + nodefilepath);
+        return oncompletefn('dep not found, "' + deparr[0] + '": ' + nodefilepath);
       }
 
       o.get_fromfilepath(depfilepath, function (err, depnode) {
         if (err) return oncompletefn(err);
 
         onnodefn(depnode, accumstart,  node, deparr[0], function (err, accum) {
+          if (err) return oncompletefn(err);
+          
           o.walk(node, accum, onnodefn, oncompletefn, deparr.slice(1));
         });
       });
