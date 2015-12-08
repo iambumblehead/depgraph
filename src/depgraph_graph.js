@@ -1,5 +1,5 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.12.07-20:53:47 (last modified)
+// Timestamp: 2015.12.08-11:12:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var immutable = require('immutable'),
@@ -79,10 +79,10 @@ var depgraph_graph = module.exports = (function (o) {
       if (!arr.some(function (elem) {
         return elem.get('uid') === node.get('uid');
       })) {
-        arr.push(node);
         node.get('outarr').map(function (edge) {
           arr = o.getdeparr(graph, graph.get(edge.get('uid')), arr);
         });
+        arr.push(node);        
       }
     }
     
