@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "description": "generate a full dependency graph or tree of nodes from a given file",

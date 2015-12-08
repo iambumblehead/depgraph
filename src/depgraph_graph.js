@@ -1,5 +1,5 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.11.28-14:31:57 (last modified)
+// Timestamp: 2015.12.07-20:53:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var immutable = require('immutable'),
@@ -16,7 +16,7 @@ var depgraph_graph = module.exports = (function (o) {
         graph_final = graph.has(uid) ? graph : graph.set(uid, node);    
 
     if (pnode && refname) {
-      if (!graph.has(pnode.get("uid"))) {
+      if (!graph.has(pnode.get('uid'))) {
         throw new Error('pnode not found');
       }
 
@@ -27,7 +27,7 @@ var depgraph_graph = module.exports = (function (o) {
   };
 
   o.getnode = function (graph, node) {
-    return graph.get(node.get("uid"));
+    return graph.get(node.get('uid'));
   };
 
   // returns first vnode with 'in' degree of 0
@@ -43,12 +43,12 @@ var depgraph_graph = module.exports = (function (o) {
         graph_pnode = o.getnode(graph, pnode);
     
     return graph
-      .set(cnode.get("uid"),
+      .set(cnode.get('uid'),
            depgraph_node.setedgein(
-             graph_cnode, pnode.get("uid"), refname))
-      .set(pnode.get("uid"),
+             graph_cnode, pnode.get('uid'), refname))
+      .set(pnode.get('uid'),
            depgraph_node.setedgeout(
-             graph_pnode, cnode.get("uid"), refname));
+             graph_pnode, cnode.get('uid'), refname));
   };
 
   // recursively walk dependencies of the module at filepath
@@ -64,7 +64,7 @@ var depgraph_graph = module.exports = (function (o) {
       filepath,
       o.get(), // empty new graph to start
       function iswalkcontinuefn (graph, node, pnode) {
-        return !graph.has(node.get("uid"));
+        return !graph.has(node.get('uid'));
       },
       function accumfn(graph, node, pnode, refname) {
         return o.setnode(graph, node, pnode, refname);
@@ -77,10 +77,10 @@ var depgraph_graph = module.exports = (function (o) {
 
     if (node) {
       if (!arr.some(function (elem) {
-        return elem.uid === node.get("uid");
+        return elem.get('uid') === node.get('uid');
       })) {
         arr.push(node);
-        node.get("outarr").map(function (edge) {
+        node.get('outarr').map(function (edge) {
           arr = o.getdeparr(graph, graph.get(edge.get('uid')), arr);
         });
       }
