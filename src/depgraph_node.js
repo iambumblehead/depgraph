@@ -8,7 +8,7 @@ var fs = require('fs'),
     detective = require('detective'),    
     immutable = require('immutable'),
     resolveuid = require('resolveuid'),
-    resolvewith = require('resolvewith'),
+    resolvewithplus = require('resolvewithplus'),
     
     depgraph_edge = require('./depgraph_edge');
 
@@ -54,16 +54,16 @@ var depgraph_node = module.exports = (function (o) {
   };
 
   // walks node childs
-  o.walk = function (node, accumstart, onnodefn, oncompletefn, deparr) {
+  o.walk = function (node, opts, accumstart, onnodefn, oncompletefn, deparr) {
     var nodefilepath = node.get("filepath"),
         depfilepath;
     
     deparr = deparr || detective(node.get("content"));
 
     if (deparr.length && // coremodule ignored
-        !resolvewith.iscoremodule(deparr[0])) {
+        !resolvewithplus.iscoremodule(deparr[0])) {
 
-      if (!(depfilepath = resolvewith(deparr[0], nodefilepath))) {
+      if (!(depfilepath = resolvewithplus(deparr[0], nodefilepath, opts))) {
         return oncompletefn('dep not found, "' + deparr[0] + '": ' + nodefilepath);
       }
 
@@ -73,7 +73,7 @@ var depgraph_node = module.exports = (function (o) {
         onnodefn(depnode, accumstart,  node, deparr[0], function (err, accum) {
           if (err) return oncompletefn(err);
           
-          o.walk(node, accum, onnodefn, oncompletefn, deparr.slice(1));
+          o.walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
         });
       });
     } else {
@@ -82,29 +82,29 @@ var depgraph_node = module.exports = (function (o) {
   };
   
   // walks node childs, recursive
-  o.walkrecursive = function (node, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
-    o.walk(node, accumstart, function onnodefn (node, accumstart, pnode, refname, nextfn) {    
+  o.walkrecursive = function (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
+    o.walk(node, opts, accumstart, function onnodefn (node, accumstart, pnode, refname, nextfn) {    
       var accum = accumfn(accumstart, node, pnode, refname);
 
       if (iswalkcontinuefn(accumstart, node, pnode, refname)) {
-        o.walkrecursive(node, accum, iswalkcontinuefn, accumfn, nextfn);
+        o.walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, nextfn);
       } else {
         nextfn(null, accum);
       }
     }, accumcompletefn);
   };
 
-  o.walkbegin = function (node, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
+  o.walkbegin = function (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
     var accum = accumfn(accumstart, node, null);
     
-    o.walkrecursive(node, accum, iswalkcontinuefn, accumfn, accumcompletefn);
+    o.walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
   };
 
-  o.walkbeginfile = function (filepath, accum, iswalkcontinuefn, accumfn, accumcompletefn) {
+  o.walkbeginfile = function (filepath, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn) {
     o.get_fromfilepath(filepath, function (err, node) {
       if (err) return accumcompletefn(err);
 
-      return o.walkbegin(node, accum, iswalkcontinuefn, accumfn, accumcompletefn);
+      return o.walkbegin(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
     });
   };
   

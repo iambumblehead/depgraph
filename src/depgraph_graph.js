@@ -59,9 +59,10 @@ var depgraph_graph = module.exports = (function (o) {
   //   else
   //     return graph
   //
-  o.getfromseedfile = function (filepath, fn) {
+  o.getfromseedfile = function (filepath, opts, fn) {
     depgraph_node.walkbeginfile(
       filepath,
+      opts,
       o.get(), // empty new graph to start
       function iswalkcontinuefn (graph, node, pnode) {
         return !graph.has(node.get('uid'));

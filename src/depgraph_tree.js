@@ -48,16 +48,16 @@ var depgraph_tree = module.exports = (function (o) {
     return o.filtered(o.getfromgraph(graph), []);
   };
 
-  o.getfromseedfile = function (filepath, fn) {
-    depgraph_graph.getfromseedfile(filepath, function (err, graph) {
+  o.getfromseedfile = function (filepath, opts, fn) {
+    depgraph_graph.getfromseedfile(filepath, opts, function (err, graph) {
       if (err) return fn(err);
 
       fn(null, o.getfromgraph(graph));
     });
   };
 
-  o.getfromseedfilesmall = function (filepath, fn) {
-    depgraph_graph.getfromseedfile(filepath, function (err, graph) {
+  o.getfromseedfilesmall = function (filepath, opts, fn) {
+    depgraph_graph.getfromseedfile(filepath, opts, function (err, graph) {
       if (err) return fn(err);
 
       fn(null, o.getfromgraphsmall(graph));

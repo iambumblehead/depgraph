@@ -1,0 +1,1 @@
+var bowermodule = module.exports = {};
