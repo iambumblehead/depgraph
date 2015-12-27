@@ -1,5 +1,5 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.12.08-11:12:11 (last modified)
+// Timestamp: 2015.12.26-17:05:36 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var immutable = require('immutable'),
@@ -72,22 +72,35 @@ var depgraph_graph = module.exports = (function (o) {
       }, fn);
   };
 
-  o.getdeparr = function (graph, node, arr) {
+  o.getdeparr = function (graph, opts, node, narr, parr) {
     node  = node || o.getnoderoot(graph);
-    arr = arr || [];
+    opts = opts || {},
+    narr = narr || [], // node arr
+    parr = parr || []; // parent arr
 
-    if (node) {
-      if (!arr.some(function (elem) {
+    if (node) {      
+      if (!narr.some(function (elem) {
         return elem.get('uid') === node.get('uid');
+      }) && !parr.some(function (pnode) {
+        if (pnode.get('uid') === node.get('uid')) {
+          if (opts.iscircular === false) {
+            throw new Error('[!!!] circular dependency: :pnode <=> :cnode'
+                            .replace(/:pnode/, pnode.get('uid'))
+                            .replace(/:cnode/, parr[0].get('uid')));
+          }
+          return true;
+        }
       })) {
+        parr.unshift(node);
+        
         node.get('outarr').map(function (edge) {
-          arr = o.getdeparr(graph, graph.get(edge.get('uid')), arr);
+          narr = o.getdeparr(graph, opts, graph.get(edge.get('uid')), narr, parr);
         });
-        arr.push(node);        
+        narr.push(node);
       }
     }
     
-    return arr;
+    return narr;
   };
 
   return o;

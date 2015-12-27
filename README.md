@@ -15,6 +15,7 @@ depgraph is similar to [module-deps][2], a popular package by Substack and it us
 [2]: https://github.com/substack/module-deps           "module-deps"
 [3]: https://github.com/iambumblehead/resolvewith/blob/master/src/resolvewith.js "resolvewith"
 [4]: https://github.com/substack/node-archy#example     "archy tree"
+[5]: https://github.com/substack/browserify-handbook#browser-field
 
 ---------------------------------------------------------
 
@@ -161,7 +162,7 @@ _result_
 
 ## Array
 
-The graph is used to construct a dependency-ordered array
+The graph is used to construct a dependency-ordered array.
 
 ```javascript
 depgraph.graph.getfromseedfile('./test/files/root.js', function (err, graph) {
@@ -344,7 +345,7 @@ depgraph-0.0.6:~/test/files/root.js
 
 # Modifiers
 
-The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json or bower.json file.
+The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json or bower.json file, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown for circular dependencies found.
 
 ---------------------------------------------------------
 #### <a id="license">license
