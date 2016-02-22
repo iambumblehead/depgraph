@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "description": "generate a full dependency graph or tree of nodes from a given file",
@@ -23,7 +23,7 @@
     "detective" : "~4.1.x",
     "resolve" : "~1.1.x",
     "resolveuid" : "~0.0.x",
-    "resolvewithplus" : "^0.0.5",    
+    "resolvewithplus" : "^0.0.6",
     "moduletype" : "~0.0.x",
     "immutable" : "3.7.4",
     "archy" : "1.0.x"
