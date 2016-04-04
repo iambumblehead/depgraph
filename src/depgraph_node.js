@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2015.11.28-00:43:19 (last modified)
+// Timestamp: 2016.04.04-12:17:38 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -60,7 +60,9 @@ var depgraph_node = module.exports = (function (o) {
     
     deparr = deparr || detective(node.get("content"));
 
-    if (deparr.length && // coremodule ignored
+    if (!opts.skipdeparr.some(
+      function (skip) { return nodefilepath.indexOf(skip) !== -1; }) &&
+        deparr.length && // coremodule ignored
         !resolvewithplus.iscoremodule(deparr[0])) {
 
       if (!(depfilepath = resolvewithplus(deparr[0], nodefilepath, opts))) {
@@ -72,7 +74,7 @@ var depgraph_node = module.exports = (function (o) {
 
         onnodefn(depnode, accumstart,  node, deparr[0], function (err, accum) {
           if (err) return oncompletefn(err);
-          
+
           o.walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
         });
       });
