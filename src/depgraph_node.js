@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2016.04.04-12:17:38 (last modified)
+// Timestamp: 2016.04.14-13:25:28 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -35,6 +35,32 @@ var depgraph_node = module.exports = (function (o) {
     fs.readFile(filepath, 'utf-8', function (err, filestr) {
       err ? fn(err) : fn(null, o.get(filepath, filestr));
     });      
+  };
+
+  o.get_fromfilepathrel = function (filepath, opts, fn) {
+    var fullpath = resolvewithplus(filepath, './', opts);
+
+    if (!fullpath) {
+      return fn('dep not found, "' + filepath + '": ' + fullpath);
+    }
+    
+    o.get_fromfilepath(fullpath, fn);
+  };
+
+  o.get_arrfromfilepathrel = function (filepatharr, opts, fn) {
+    var nodesarr = [];
+    
+    (function nextdep (filepatharr, x, prepend) {
+      if (!x--) return fn(null, nodesarr);
+
+      o.get_fromfilepathrel(filepatharr[x], opts, function (err, res) {
+        if (err) return fn(err);
+
+        nodesarr.push(res);
+        
+        nextdep(filepatharr, x);        
+      });
+    }(filepatharr, filepatharr.length));
   };
 
   o.setedge = function (node, uid, refname, edgename) {
