@@ -83,8 +83,12 @@ var depgraph_node = module.exports = (function (o) {
   o.walk = function (node, opts, accumstart, onnodefn, oncompletefn, deparr) {
     var nodefilepath = node.get("filepath"),
         depfilepath;
-    
-    deparr = deparr || detective(node.get("content"));
+      
+    try {
+      deparr = deparr || detective(node.get("content"));
+    } catch (e) {
+      throw new Error('[!!!] error: ' + nodefilepath);
+    }
 
     if (!opts.skipdeparr.some(
       function (skip) { return nodefilepath.indexOf(skip) !== -1; }) &&
