@@ -38,7 +38,7 @@ var depgraph_node = module.exports = (function (o) {
   };
 
   o.get_fromfilepathrel = function (filepath, opts, fn) {
-    var fullpath = resolvewithplus(filepath, './', opts);
+    var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
 
     if (!fullpath) {
       return fn('dep not found, "' + filepath + '": ' + fullpath);
