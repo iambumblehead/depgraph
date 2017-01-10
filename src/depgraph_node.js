@@ -28,6 +28,13 @@ var depgraph_node = module.exports = (function (o) {
     });
   };
 
+  o.get_fromjs = js =>
+    immutable.Map(js).merge(
+      immutable.Map({
+        outarr : immutable.List(js.outarr.map(immutable.Map) || []),
+        inarr  : immutable.List(js.inarr.map(immutable.Map) || [])
+      }));
+
   o.get_fromfilepath = function (filepath, fn) {
     fnguard.isstr(filepath).isfn(fn);
 
