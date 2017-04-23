@@ -18,15 +18,14 @@ var depgraph_node = module.exports = (function (o) {
   // 'out' are dependencies
   //
   // nodes with 'in' degree of 0 are tree root nodes
-  o.get = function (filepath, filecontent) {
-    return immutable.Map({
+  o.get = (filepath, filecontent) =>
+    immutable.Map({
       content   : filecontent,
       filepath  : filepath,
       uid       : resolveuid(filepath),
       inarr     : immutable.List(),
       outarr    : immutable.List()
     });
-  };
 
   o.get_fromjs = js =>
     immutable.Map(js).merge(
@@ -35,16 +34,17 @@ var depgraph_node = module.exports = (function (o) {
         inarr  : immutable.List(js.inarr.map(immutable.Map) || [])
       }));
 
-  o.get_fromfilepath = function (filepath, fn) {
+  o.get_fromfilepath = (filepath, fn) => {
     fnguard.isstr(filepath).isfn(fn);
 
     filepath = path.resolve(filepath);
-    fs.readFile(filepath, 'utf-8', function (err, filestr) {
+
+    fs.readFile(filepath, 'utf-8', (err, filestr) => {
       err ? fn(err) : fn(null, o.get(filepath, filestr));
     });      
   };
 
-  o.get_fromfilepathrel = function (filepath, opts, fn) {
+  o.get_fromfilepathrel = (filepath, opts, fn) => {
     var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
 
     if (!fullpath) {
@@ -54,13 +54,13 @@ var depgraph_node = module.exports = (function (o) {
     o.get_fromfilepath(fullpath, fn);
   };
 
-  o.get_arrfromfilepathrel = function (filepatharr, opts, fn) {
+  o.get_arrfromfilepathrel = (filepatharr, opts, fn) => {
     var nodesarr = [];
     
     (function nextdep (filepatharr, x, prepend) {
       if (!x--) return fn(null, nodesarr);
 
-      o.get_fromfilepathrel(filepatharr[x], opts, function (err, res) {
+      o.get_fromfilepathrel(filepatharr[x], opts, (err, res) => {
         if (err) return fn(err);
 
         nodesarr.push(res);
@@ -70,35 +70,45 @@ var depgraph_node = module.exports = (function (o) {
     }(filepatharr, filepatharr.length));
   };
 
-  o.setedge = function (node, uid, refname, edgename) {
+  o.setedge = (node, uid, refname, edgename) => {
     var edge = depgraph_edge.get(refname, uid);
 
-    return node.set(edgename, node.get(edgename).filter(function (inedge) {
-      return depgraph_edge.issamenot(edge, inedge);
-    }).push(edge));
+    return node.set(edgename, node.get(edgename).filter((inedge) => (
+      depgraph_edge.issamenot(edge, inedge)
+    )).push(edge));
   };
   
-  o.setedgein = function (node, uid, refname) {
-    return o.setedge(node, uid, refname, 'inarr');
-  };
+  o.setedgein = (node, uid, refname) => 
+    o.setedge(node, uid, refname, 'inarr');
 
-  o.setedgeout = function (node, uid, refname) {
-    return o.setedge(node, uid, refname, 'outarr');
+  o.setedgeout = (node, uid, refname) =>
+    o.setedge(node, uid, refname, 'outarr');
+
+  o.detective = (node) => {
+    let filepath = node.get('filepath'),
+        detectivetype = /.ts$/.test(filepath)
+          ? require('detective-typescript') // not in npm yet :(
+          : detective;
+    
+    try {
+      return detectivetype(node.get('content'));
+    } catch (e) {
+      console.error(e);
+      throw new Error('[!!!] error: ' + filepath);
+    }
   };
 
   // walks node childs
-  o.walk = function (node, opts, accumstart, onnodefn, oncompletefn, deparr) {
-    var nodefilepath = node.get("filepath"),
-        depfilepath;
-      
-    try {
-      deparr = deparr || detective(node.get("content"));
-    } catch (e) {
-      throw new Error('[!!!] error: ' + nodefilepath);
-    }
+  o.walk = (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
+    var nodefilepath = node.get('filepath'),
+        depfilepath,
+        skipdeparr = opts.skipdeparr || [];
 
-    if (!opts.skipdeparr.some(
-      function (skip) { return nodefilepath.indexOf(skip) !== -1; }) &&
+
+    deparr = deparr || o.detective(node);
+
+    if (!opts.skipdeparr
+        .some((skip) => nodefilepath.indexOf(skip) !== -1) &&
         deparr.length && // coremodule ignored
         !resolvewithplus.iscoremodule(deparr[0])) {
 
@@ -106,10 +116,10 @@ var depgraph_node = module.exports = (function (o) {
         return oncompletefn('dep not found, "' + deparr[0] + '": ' + nodefilepath);
       }
 
-      o.get_fromfilepath(depfilepath, function (err, depnode) {
+      o.get_fromfilepath(depfilepath, (err, depnode) => {
         if (err) return oncompletefn(err);
 
-        onnodefn(depnode, accumstart,  node, deparr[0], function (err, accum) {
+        onnodefn(depnode, accumstart,  node, deparr[0], (err, accum) => {
           if (err) return oncompletefn(err);
 
           o.walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
@@ -121,7 +131,7 @@ var depgraph_node = module.exports = (function (o) {
   };
   
   // walks node childs, recursive
-  o.walkrecursive = function (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
+  o.walkrecursive = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
     o.walk(node, opts, accumstart, function onnodefn (node, accumstart, pnode, refname, nextfn) {    
       var accum = accumfn(accumstart, node, pnode, refname);
 
@@ -133,14 +143,14 @@ var depgraph_node = module.exports = (function (o) {
     }, accumcompletefn);
   };
 
-  o.walkbegin = function (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) {
+  o.walkbegin = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
     var accum = accumfn(accumstart, node, null);
     
     o.walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
   };
 
-  o.walkbeginfile = function (filepath, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn) {
-    o.get_fromfilepath(filepath, function (err, node) {
+  o.walkbeginfile = (filepath, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn) => {
+    o.get_fromfilepath(filepath, (err, node) => {
       if (err) return accumcompletefn(err);
 
       return o.walkbegin(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
