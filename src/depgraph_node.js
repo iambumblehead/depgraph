@@ -1,18 +1,19 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2016.04.14-13:25:28 (last modified)
+// Timestamp: 2017.04.24-02:44:36 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var fs = require('fs'),
-    path = require('path'),
-    fnguard = require('fnguard'),
-    detective = require('detective'),    
-    immutable = require('immutable'),
-    resolveuid = require('resolveuid'),
-    resolvewithplus = require('resolvewithplus'),
+const fs = require('fs'),
+      path = require('path'),
+      fnguard = require('fnguard'),
+      detective = require('detective'),
+      detectivees6 = require('detective-es6'),
+      immutable = require('immutable'),
+      resolveuid = require('resolveuid'),
+      resolvewithplus = require('resolvewithplus'),
     
-    depgraph_edge = require('./depgraph_edge');
+      depgraph_edge = require('./depgraph_edge');
 
-var depgraph_node = module.exports = (function (o) {
+const depgraph_node = module.exports = (o => {
 
   // 'in'  are dependents
   // 'out' are dependencies
@@ -84,11 +85,21 @@ var depgraph_node = module.exports = (function (o) {
   o.setedgeout = (node, uid, refname) =>
     o.setedge(node, uid, refname, 'outarr');
 
+  o.detectivetype = (node, filepath) => {
+    let detectivetype = detective;
+
+    if (/.[jt]sx$/.test(filepath)) {
+      detectivetype = detectivees6;
+    } else if (/.ts$/.test(filepath)) {
+      detectivetype = require('detective-typescript'); // not in npm yet :(
+    }
+
+    return detectivetype;
+  };
+
   o.detective = (node) => {
     let filepath = node.get('filepath'),
-        detectivetype = /.ts$/.test(filepath)
-          ? require('detective-typescript') // not in npm yet :(
-          : detective;
+        detectivetype = o.detectivetype(node, filepath);
     
     try {
       return detectivetype(node.get('content'));
@@ -159,4 +170,4 @@ var depgraph_node = module.exports = (function (o) {
   
   return o;
   
-}({}));
+})({});
