@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "description": "generate a full dependency graph or tree of nodes from a given file",
@@ -24,16 +24,17 @@
     "detective" : "~4.1.x",
     "resolve" : "~1.1.x",
     "resolveuid" : "~0.0.x",
-    "resolvewithplus" : "^0.0.8",
+    "resolvewithplus" : "^0.0.9",
     "moduletype" : "~0.0.x",
-    "immutable" : "3.7.4",
+    "immutable" : "^3.8.1",
     "archy" : "1.0.x"
   },
   "devDependencies" : {
-    "jasmine-node" : "~1.14.x"
+    "jasmine": "2.5.3",
+    "jasmine-spec-reporter": "3.2.0"
   },
   "scripts" : {
-    "test" : "node node_modules/jasmine-node/bin/jasmine-node --verbose test/",
-    "start" : "node test/files/testrun.js"
+    "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
+    "start" : "node spec/files/testrun.js"
   }
 }
