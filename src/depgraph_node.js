@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2017.05.26-15:35:35 (last modified)
+// Timestamp: 2017.05.26-18:02:00 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -117,14 +117,12 @@ const depgraph_node = module.exports = (o => {
         aliasarr = opts.aliasarr || [];
 
     deparr = deparr || o.detective(node);
-    
+
     // very inefficient :)
-    aliasarr.map(([matchre, path]) => (
-      deparr = deparr.map(dep => (
-        matchre.test(dep) ? path : dep
-      ))
+    aliasarr.map(([matchname, newname]) => (
+      deparr = deparr.map(dep => dep === matchname ? newname : dep)
     ));
-      
+
     if (!opts.skipdeparr
         .some((skip) => nodefilepath.indexOf(skip) !== -1) &&
         deparr.length && // coremodule ignored
