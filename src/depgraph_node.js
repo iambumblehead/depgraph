@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2017.07.22-17:54:44 (last modified)
+// Timestamp: 2017.10.07-01:58:57 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -97,12 +97,16 @@ const depgraph_node = module.exports = (o => {
     return detectivetype;
   };
 
+  // rm spread operator { ...namespace }
+  o.rmspread = str =>
+    str.replace(/\.\.\./g, '');
+
   o.detective = (node) => {
     let filepath = node.get('filepath'),
         detectivetype = o.detectivetype(node, filepath);
     
     try {
-      return detectivetype(node.get('content'));
+      return detectivetype(o.rmspread(node.get('content')));
     } catch (e) {
       console.error(e);
       throw new Error('[!!!] error: ' + filepath);

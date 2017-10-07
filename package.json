@@ -1,7 +1,7 @@
 {
   "name": "depgraph",
-  "version": "0.2.6",
-  "license" : "MIT",
+  "version": "0.2.7",
+  "license": "MIT",
   "main": "src/depgraph",
   "readmeFilename": "README.md",
   "description": "generate a full dependency graph or tree of nodes from a given file",
@@ -12,7 +12,7 @@
   "keywords": [
     "dependency",
     "dependencies",
-    "dependency tree",    
+    "dependency tree",
     "dependency graph",
     "graph",
     "concatenate",
@@ -20,23 +20,23 @@
     "commonjs"
   ],
   "dependencies": {
-    "detective-typescript": "github:pahen/detective-typescript",
-    "detective-es6": "^1.1.6",
-    "fnguard" : "~0.6.x",
-    "detective" : "~4.5.x",
-    "resolve" : "~1.1.x",
-    "resolveuid" : "~0.0.x",
-    "resolvewithplus" : "^0.0.9",
-    "moduletype" : "~0.0.x",
-    "immutable" : "^3.8.1",
-    "archy" : "1.0.x"
+    "detective-typescript": "1.0.1",
+    "detective-es6": "^1.2.0",
+    "fnguard": "~0.6.x",
+    "detective": "~4.5.x",
+    "resolve": "~1.1.x",
+    "resolveuid": "~0.0.x",
+    "resolvewithplus": "^0.0.9",
+    "moduletype": "~0.0.x",
+    "immutable": "^3.8.2",
+    "archy": "1.0.x"
   },
-  "devDependencies" : {
+  "devDependencies": {
     "jasmine": "2.5.3",
     "jasmine-spec-reporter": "3.2.0"
   },
-  "scripts" : {
+  "scripts": {
     "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
-    "start" : "node spec/files/testrun.js"
+    "start": "node spec/files/testrun.js"
   }
 }
