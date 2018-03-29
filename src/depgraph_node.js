@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2018.03.29-05:43:19 (last modified)
+// Timestamp: 2018.03.29-05:51:51 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -22,7 +22,7 @@ module.exports = (o => {
   // nodes with 'in' degree of 0 are tree root nodes
   o.get = (filepath, filecontent, uid) =>
     immutable.Map({
-      module   : moduletype(filecontent),
+      module   : moduletype.is(filecontent),
       content  : filecontent,
       filepath : filepath,
       uid      : uid || resolveuid(filepath),
