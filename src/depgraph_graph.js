@@ -1,12 +1,11 @@
 // Filename: depgraph_graph.js  
-// Timestamp: 2015.12.26-17:05:36 (last modified)
+// Timestamp: 2018.03.29-05:44:05 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var immutable = require('immutable'),
-    depgraph_node = require('./depgraph_node');
+const immutable = require('immutable'),
+      depgraph_node = require('./depgraph_node');
 
-var depgraph_graph = module.exports = (function (o) {
-  
+module.exports = (function (o) {
   o.get = function (node) {
     return immutable.Map({});
   };

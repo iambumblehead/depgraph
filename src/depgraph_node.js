@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2017.10.07-01:58:57 (last modified)
+// Timestamp: 2018.03.29-05:43:19 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -8,12 +8,13 @@ const fs = require('fs'),
       detective = require('detective'),
       detectivees6 = require('detective-es6'),
       immutable = require('immutable'),
+      moduletype = require('moduletype'),
       resolveuid = require('resolveuid'),
       resolvewithplus = require('resolvewithplus'),
     
       depgraph_edge = require('./depgraph_edge');
 
-const depgraph_node = module.exports = (o => {
+module.exports = (o => {
 
   // 'in'  are dependents
   // 'out' are dependencies
@@ -21,11 +22,12 @@ const depgraph_node = module.exports = (o => {
   // nodes with 'in' degree of 0 are tree root nodes
   o.get = (filepath, filecontent, uid) =>
     immutable.Map({
-      content   : filecontent,
-      filepath  : filepath,
-      uid       : uid || resolveuid(filepath),
-      inarr     : immutable.List(),
-      outarr    : immutable.List()
+      module   : moduletype(filecontent),
+      content  : filecontent,
+      filepath : filepath,
+      uid      : uid || resolveuid(filepath),
+      inarr    : immutable.List(),
+      outarr   : immutable.List()
     });
 
   o.get_fromjs = js =>
@@ -88,7 +90,7 @@ const depgraph_node = module.exports = (o => {
   o.detectivetype = (node, filepath) => {
     let detectivetype = detective;
 
-    if (/.[jt]sx$/.test(filepath)) {
+    if (/.[jt]sx?$/.test(filepath)) {
       detectivetype = detectivees6;
     } else if (/.ts$/.test(filepath)) {
       detectivetype = require('detective-typescript'); // not in npm yet :(

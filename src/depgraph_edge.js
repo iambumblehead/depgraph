@@ -1,11 +1,10 @@
 // Filename: depgraph_edge.js  
-// Timestamp: 2015.11.24-00:14:28 (last modified)
+// Timestamp: 2018.03.29-05:44:21 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var immutable = require('immutable');
+const immutable = require('immutable');
 
-var depgraph_edge = module.exports = (function (o) {
-
+module.exports = (function (o) {
   o.get = function (refname, uid) {
     return immutable.Map({
       refname : refname,

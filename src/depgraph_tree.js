@@ -1,14 +1,14 @@
 // Filename: depgraph_tree.js  
-// Timestamp: 2015.11.28-11:49:33 (last modified)
+// Timestamp: 2018.03.29-05:43:38 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 //
 // full tree construction is impossible when circular references exist, the tree
 // printed by this file provides visual-feedback for interactive development
 
-var depgraph_graph = require('./depgraph_graph'),
-    archy = require('archy');
+const depgraph_graph = require('./depgraph_graph'),
+      archy = require('archy');
 
-var depgraph_tree = module.exports = (function (o) {
+module.exports = (function (o) {
   
   // compatible with substack's 'archy', which also uses label/nodes:
   //
