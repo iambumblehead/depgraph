@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "main": "src/depgraph",
   "readmeFilename": "README.md",
@@ -22,12 +22,12 @@
   "dependencies": {
     "detective-typescript": "1.0.1",
     "detective-es6": "^1.2.0",
-    "fnguard": "~0.6.x",
+    "fnguard": "~0.6.5",
     "detective": "^5.1.0",
     "resolve": "~1.1.x",
     "resolveuid": "~0.0.x",
     "resolvewithplus": "^0.0.9",
-    "moduletype": "^0.0.5",
+    "moduletype": "^0.0.6",
     "immutable": "^3.8.2",
     "archy": "1.0.x"
   },
@@ -36,7 +36,7 @@
     "jasmine-spec-reporter": "3.2.0"
   },
   "scripts": {
-    "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
+    "test": "jasmine --verbose",
     "start": "node spec/files/testrun.js"
   }
 }
