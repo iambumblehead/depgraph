@@ -1,5 +1,5 @@
 // Filename: depgraph_node.js  
-// Timestamp: 2018.03.29-06:03:02 (last modified)
+// Timestamp: 2018.03.30-03:33:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -93,9 +93,14 @@ module.exports = (o => {
     if (/.[mj]sx?$/.test(filepath)) {
       detectivetype = content =>
         detectivees6(content)
-          .concat(detective(content));
+        .concat(detective(content, {
+          parse: {
+            sourceType: 'module',
+            allowImportExportEverywhere: true
+          }
+        }));
     } else if (/.ts$/.test(filepath)) {
-      detectivetype = require('detective-typescript'); // not in npm yet :(
+      detectivetype = require('detective-typescript');
     }
 
     return detectivetype;

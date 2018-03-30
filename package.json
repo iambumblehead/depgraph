@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "main": "src/depgraph",
   "readmeFilename": "README.md",
@@ -20,7 +20,7 @@
     "commonjs"
   ],
   "dependencies": {
-    "detective-typescript": "1.0.1",
+    "detective-typescript": "2.0.0",
     "detective-es6": "^1.2.0",
     "fnguard": "~0.6.5",
     "detective": "^5.1.0",
