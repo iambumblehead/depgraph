@@ -1,11 +1,9 @@
 depgraph
 ========
-**(c)[Bumblehead][0], 2016** [MIT-license](#license)
+**(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-depgraph returns a dependency graph for a javascript module. It is meant for use with NPM/CommonJS, but could be modified to support dependency-resolution of different module patterns such as *ESM*. Graph and node structures are created with Facebook's [immutable-js][1]. CommonJS dependency resolution is handled with [resolvewith][3].
-
-depgraph does not support shell commands, bundling or other features which may be added indirectly through other scripts. It stores file contents as a string rather than an ast-tree or stream.
+depgraph returns a dependency graph for a javascript module. It resolves ES6 modules, CommonJS modules and Typescript files using [resolvewithplus][3].
 
 depgraph is similar to [module-deps][2], a popular package by Substack and it uses some of the same dependencies as module-deps.
 
@@ -13,7 +11,7 @@ depgraph is similar to [module-deps][2], a popular package by Substack and it us
 [0]: http://www.bumblehead.com                          "bumblehead"
 [1]: http://facebook.github.io/immutable-js           "immutable-js"
 [2]: https://github.com/substack/module-deps           "module-deps"
-[3]: https://github.com/iambumblehead/resolvewith/blob/master/src/resolvewith.js "resolvewith"
+[3]: https://github.com/iambumblehead/resolvewithplus/blob/master/src/resolvewithplus.js "resolvewith"
 [4]: https://github.com/substack/node-archy#example     "archy tree"
 [5]: https://github.com/substack/browserify-handbook#browser-field
 
@@ -347,14 +345,12 @@ depgraph-0.0.6:~/test/files/root.js
 
 The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json or bower.json file, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown for circular dependencies found.
 
----------------------------------------------------------
-#### <a id="license">license
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
 
 (The MIT License)
 
-Copyright (c) 2016 [Bumblehead][0] <chris@bumblehead.com>
+Copyright (c) [Bumblehead][0] <chris@bumblehead.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
