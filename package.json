@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "license": "MIT",
   "main": "src/depgraph",
   "readmeFilename": "README.md",
@@ -27,7 +27,7 @@
     "resolve": "~1.1.x",
     "resolveuid": "~0.0.x",
     "resolvewithplus": "^0.1.0",
-    "moduletype": "^0.0.7",
+    "moduletype": "^0.0.8",
     "immutable": "^3.8.2",
     "archy": "1.0.x"
   },
