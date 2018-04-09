@@ -24,7 +24,7 @@ A sample graph, tree and dependency-ordered array are seen using example calls b
 For each graph node, "inarr" references dependent nodes and "outarr" references depedency nodes.
 
 ```javascript
-depgraph.graph.getfromseedfile('./test/files/root.js', {}, function (err, graph) {
+depgraph.graph.getfromseedfile('./test/files/root.js', {}, (err, graph) => {
   console.log(JSON.stringify(graph, null, '\t'));
 });
 ```
@@ -37,123 +37,97 @@ _result_
     "filepath": "./test/files/root.js",
     "uid": "depgraph-0.0.6:~/test/files/root.js",
     "inarr": [],
-    "outarr": [
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/fileb.js"
-      },
-      {
-	"refname": "./filea",
-	"uid": "depgraph-0.0.6:~/test/files/filea.js"
-      },
-      {
-	"refname": "./filec",
-	"uid": "depgraph-0.0.6:~/test/files/filec/index.js"
-      },
-      {
-	"refname": "resolveuid",
-	"uid": "resolveuid-0.0.2:~/index.js"
-      },
-      {
-	"refname": "./dir/filed.js",
-	"uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
-      }
-    ]
+    "outarr": [{
+      "refname": "./fileb",
+      "uid": "depgraph-0.0.6:~/test/files/fileb.js"
+    },{
+      "refname": "./filea",
+      "uid": "depgraph-0.0.6:~/test/files/filea.js"
+    },{
+      "refname": "./filec",
+      "uid": "depgraph-0.0.6:~/test/files/filec/index.js"
+    },{
+	  "refname": "resolveuid",
+      "uid": "resolveuid-0.0.2:~/index.js"
+    },{
+      "refname": "./dir/filed.js",
+      "uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
+    }]
   },
   "depgraph-0.0.6:~/test/files/fileb.js": {
     "content": "...",
     "filepath": "./test/files/fileb.js",
     "uid": "depgraph-0.0.6:~/test/files/fileb.js",
-    "inarr": [
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      },
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/filea.js"
-      }
-    ],
+    "inarr": [{
+      "refname": "./fileb",
+      "uid": "depgraph-0.0.6:~/test/files/root.js"
+    },{
+      "refname": "./fileb",
+      "uid": "depgraph-0.0.6:~/test/files/filea.js"
+    }],
     "outarr": []
   },
   "depgraph-0.0.6:~/test/files/filea.js": {
     "content": "...",
     "filepath": "./test/files/filea.js",
     "uid": "depgraph-0.0.6:~/test/files/filea.js",
-    "inarr": [
-      {
-	"refname": "./filea",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/fileb.js"
-      }
-    ]
+    "inarr": [{
+      "refname": "./filea",
+      "uid": "depgraph-0.0.6:~/test/files/root.js"
+    }],
+    "outarr": [{
+      "refname": "./fileb",
+      "uid": "depgraph-0.0.6:~/test/files/fileb.js"
+    }]
   },
   "depgraph-0.0.6:~/test/files/filec/index.js": {
     "content": "...",
     "filepath": "./test/files/filec/index.js",
     "uid": "depgraph-0.0.6:~/test/files/filec/index.js",
-    "inarr": [
-      {
-	"refname": "./filec",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      },
-      {
-	"refname": "./../filec",
-	"uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
-      }
-    ],
+    "inarr": [{
+      "refname": "./filec",
+      "uid": "depgraph-0.0.6:~/test/files/root.js"
+    },{
+      "refname": "./../filec",
+      "uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
+    }],
     "outarr": []
   },
   "resolveuid-0.0.2:~/index.js": {
     "content": "...",
     "filepath": "./node_modules/resolveuid/index.js",
     "uid": "resolveuid-0.0.2:~/index.js",
-    "inarr": [
-      {
-	"refname": "resolveuid",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./src/resolveuid",
-	"uid": "resolveuid-0.0.2:~/src/resolveuid.js"
-      }
-    ]
+    "inarr": [{
+      "refname": "resolveuid",
+      "uid": "depgraph-0.0.6:~/test/files/root.js"
+    }],
+    "outarr": [{
+      "refname": "./src/resolveuid",
+      "uid": "resolveuid-0.0.2:~/src/resolveuid.js"
+    }]
   },
   "resolveuid-0.0.2:~/src/resolveuid.js": {
     "content": "...",
     "filepath": "./node_modules/resolveuid/src/resolveuid.js",
     "uid": "resolveuid-0.0.2:~/src/resolveuid.js",
-    "inarr": [
-      {
-	"refname": "./src/resolveuid",
-	"uid": "resolveuid-0.0.2:~/index.js"
-      }
-    ],
+    "inarr": [{
+      "refname": "./src/resolveuid",
+      "uid": "resolveuid-0.0.2:~/index.js"
+    }],
     "outarr": []
   },
   "depgraph-0.0.6:~/test/files/dir/filed.js": {
     "content": "...",
     "filepath": "./test/files/dir/filed.js",
     "uid": "depgraph-0.0.6:~/test/files/dir/filed.js",
-    "inarr": [
-      {
-	"refname": "./dir/filed.js",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./../filec",
-	"uid": "depgraph-0.0.6:~/test/files/filec/index.js"
-      }
-    ]
+    "inarr": [{
+      "refname": "./dir/filed.js",
+      "uid": "depgraph-0.0.6:~/test/files/root.js"
+    }],
+    "outarr": [{
+      "refname": "./../filec",
+      "uid": "depgraph-0.0.6:~/test/files/filec/index.js"
+    }]
   }
 }
 ```
@@ -163,138 +137,104 @@ _result_
 The graph is used to construct a dependency-ordered array.
 
 ```javascript
-depgraph.graph.getfromseedfile('./test/files/root.js', function (err, graph) {
+depgraph.graph.getfromseedfile('./test/files/root.js', (err, graph) => {
   console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '\t'));
 });
 ```
 
 _result_
 ```json
-[
-  {
-    "content": "...",
-    "filepath": "./test/files/fileb.js",
-    "uid": "depgraph-0.0.6:~/test/files/fileb.js",
-    "inarr": [
-      {
-	"refname": "./fileb",
+[{
+  "content": "...",
+  "filepath": "./test/files/fileb.js",
+  "uid": "depgraph-0.0.6:~/test/files/fileb.js",
+  "inarr": [{
+    "refname": "./fileb",
+    "uid": "depgraph-0.0.6:~/test/files/root.js"
+  },{
+    "refname": "./fileb",
+    "uid": "depgraph-0.0.6:~/test/files/filea.js"
+  }],
+  "outarr": []
+},{
+  "content": "...",
+  "filepath": "./test/files/filea.js",
+  "uid": "depgraph-0.0.6:~/test/files/filea.js",
+  "inarr": [{
+    "refname": "./filea",
+    "uid": "depgraph-0.0.6:~/test/files/root.js"
+  }],
+  "outarr": [{
+    "refname": "./fileb",
+    "uid": "depgraph-0.0.6:~/test/files/fileb.js"
+  }]
+},{
+  "content": "...",
+  "filepath": "./test/files/filec/index.js",
+  "uid": "depgraph-0.0.6:~/test/files/filec/index.js",
+  "inarr": [{
+    "refname": "./filec",
+    "uid": "depgraph-0.0.6:~/test/files/root.js"
+  },{
+    "refname": "./../filec",
+    "uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
+  }],
+  "outarr": []
+},{
+  "content": "...",
+  "filepath": "./node_modules/resolveuid/src/resolveuid.js",
+  "uid": "resolveuid-0.0.2:~/src/resolveuid.js",
+  "inarr": [{
+    "refname": "./src/resolveuid",
+    "uid": "resolveuid-0.0.2:~/index.js"
+  }],
+  "outarr": []
+},{
+  "content": "...",
+  "filepath": "./node_modules/resolveuid/index.js",
+  "uid": "resolveuid-0.0.2:~/index.js",
+  "inarr": [{
+    "refname": "resolveuid",
+    "uid": "depgraph-0.0.6:~/test/files/root.js"
+  }],
+  "outarr": [{
+    "refname": "./src/resolveuid",
+    "uid": "resolveuid-0.0.2:~/src/resolveuid.js"
+  }]
+},{
+  "content": "...",
+  "filepath": "./test/files/dir/filed.js",
+  "uid": "depgraph-0.0.6:~/test/files/dir/filed.js",
+  "inarr": [{
+    "refname": "./dir/filed.js",
 	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      },
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/filea.js"
-      }
-    ],
-    "outarr": []
-  },
-  {
-    "content": "...",
-    "filepath": "./test/files/filea.js",
-    "uid": "depgraph-0.0.6:~/test/files/filea.js",
-    "inarr": [
-      {
-	"refname": "./filea",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/fileb.js"
-      }
-    ]
-  },
-  {
-    "content": "...",
-    "filepath": "./test/files/filec/index.js",
-    "uid": "depgraph-0.0.6:~/test/files/filec/index.js",
-    "inarr": [
-      {
-	"refname": "./filec",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      },
-      {
-	"refname": "./../filec",
-	"uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
-      }
-    ],
-    "outarr": []
-  },
-  {
-    "content": "...",
-    "filepath": "./node_modules/resolveuid/src/resolveuid.js",
-    "uid": "resolveuid-0.0.2:~/src/resolveuid.js",
-    "inarr": [
-      {
-	"refname": "./src/resolveuid",
-	"uid": "resolveuid-0.0.2:~/index.js"
-      }
-    ],
-    "outarr": []
-  },
-  {
-    "content": "...",
-    "filepath": "./node_modules/resolveuid/index.js",
-    "uid": "resolveuid-0.0.2:~/index.js",
-    "inarr": [
-      {
-	"refname": "resolveuid",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./src/resolveuid",
-	"uid": "resolveuid-0.0.2:~/src/resolveuid.js"
-      }
-    ]
-  },
-  {
-    "content": "...",
-    "filepath": "./test/files/dir/filed.js",
-    "uid": "depgraph-0.0.6:~/test/files/dir/filed.js",
-    "inarr": [
-      {
-	"refname": "./dir/filed.js",
-	"uid": "depgraph-0.0.6:~/test/files/root.js"
-      }
-    ],
-    "outarr": [
-      {
-	"refname": "./../filec",
-	"uid": "depgraph-0.0.6:~/test/files/filec/index.js"
-      }
-    ]
-  },
-  {
-    "content": "...",
-    "filepath": "./test/files/root.js",
-    "uid": "depgraph-0.0.6:~/test/files/root.js",
-    "inarr": [],
-    "outarr": [
-      {
-	"refname": "./fileb",
-	"uid": "depgraph-0.0.6:~/test/files/fileb.js"
-      },
-      {
-	"refname": "./filea",
-	"uid": "depgraph-0.0.6:~/test/files/filea.js"
-      },
-      {
-	"refname": "./filec",
-	"uid": "depgraph-0.0.6:~/test/files/filec/index.js"
-      },
-      {
-	"refname": "resolveuid",
-	"uid": "resolveuid-0.0.2:~/index.js"
-      },
-      {
-	"refname": "./dir/filed.js",
-	"uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
-      }
-    ]
-  }
-]
+  }],
+  "outarr": [{
+    "refname": "./../filec",
+    "uid": "depgraph-0.0.6:~/test/files/filec/index.js"
+  }]
+},{
+  "content": "...",
+  "filepath": "./test/files/root.js",
+  "uid": "depgraph-0.0.6:~/test/files/root.js",
+  "inarr": [],
+  "outarr": [{
+    "refname": "./fileb",
+    "uid": "depgraph-0.0.6:~/test/files/fileb.js"
+  },{
+    "refname": "./filea",
+    "uid": "depgraph-0.0.6:~/test/files/filea.js"
+  },{
+    "refname": "./filec",
+    "uid": "depgraph-0.0.6:~/test/files/filec/index.js"
+  },{
+    "refname": "resolveuid",
+    "uid": "resolveuid-0.0.2:~/index.js"
+  },{
+    "refname": "./dir/filed.js",
+    "uid": "depgraph-0.0.6:~/test/files/dir/filed.js"
+  }]
+}]
 ```
 
 # Tree
@@ -304,7 +244,7 @@ The graph is used to generate a tree in the [archy format][4]. Full tree constru
 The default tree may render a leaf multiple times, but will render the children once only.
 
 ```javascript
-depgraph.tree.getfromseedfile('./test/files/root.js', function (err, tree) {
+depgraph.tree.getfromseedfile('./test/files/root.js', (err, tree) => {
   console.log(archy(tree));
 });
 ```
