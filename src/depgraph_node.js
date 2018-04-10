@@ -115,7 +115,7 @@ module.exports = (o => {
         detectivetype = o.detectivetype(node, filepath);
     
     try {
-      return detectivetype(o.rmspread(node.get('content')));
+      return detectivetype(node.get('content'));
     } catch (e) {
       console.error(e);
       throw new Error('[!!!] error: ' + filepath);
