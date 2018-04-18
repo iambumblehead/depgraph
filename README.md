@@ -265,7 +265,7 @@ depgraph-0.0.6:~/test/files/root.js
 The 'small' tree renders each leaf once only.
 
 ```javascript
-depgraph.tree.getfromseedfilesmall('./test/files/root.js', {}, function (err, tree) {
+depgraph.tree.getfromseedfilesmall('./test/files/root.js', {}, (err, tree) => {
   console.log(archy(tree));
 });
 ```
@@ -283,7 +283,7 @@ depgraph-0.0.6:~/test/files/root.js
 
 # Modifiers
 
-The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json or bower.json file, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown for circular dependencies found.
+The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true, ismodule : true }` directs depgraph to use the 'module' or 'browser' rather than 'main' property in a package.json or bower.json file, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown for circular dependencies found.
 
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 

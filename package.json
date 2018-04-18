@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "license": "MIT",
   "main": "src/depgraph",
   "readmeFilename": "README.md",
@@ -25,8 +25,8 @@
     "fnguard": "~0.6.5",
     "detective": "^5.1.0",
     "resolve": "~1.1.x",
-    "resolveuid": "~0.0.x",
-    "resolvewithplus": "^0.1.0",
+    "resolveuid": "^0.0.3",
+    "resolvewithplus": "^0.1.1",
     "moduletype": "^0.0.8",
     "immutable": "^3.8.2",
     "archy": "1.0.x"
