@@ -5,12 +5,12 @@
 
 var depgraph_tree = require('../src/depgraph_tree');
 
-describe('depgraph_tree.getfromseedfile', function () {
-  it('[./test/files/root.js] should print a tree', function (donefn) {
+describe('depgraph_tree.getfromseedfile', () => {
+  it('[./test/files/root.js] should print a tree', donefn => {
 
-    var filepath = './test/files/root.js';
+    var filepath = './spec/files/root.js';
 
-    depgraph_tree.getfromseedfile(filepath, function (err, tree) {
+      depgraph_tree.getfromseedfile(filepath, {}, (err, tree) => {
       // console.log(archy(tree))
       expect(true).toBe(true);
       donefn();

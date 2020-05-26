@@ -136,7 +136,7 @@ module.exports = (o => {
       deparr = deparr.map(dep => dep === matchname ? newname : dep)
     ));
 
-    if (!opts.skipdeparr
+    if (!skipdeparr
         .some((skip) => nodefilepath.indexOf(skip) !== -1) &&
         deparr.length && // coremodule ignored
         !resolvewithplus.iscoremodule(deparr[0])) {
