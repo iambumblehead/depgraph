@@ -2,19 +2,19 @@
 // Timestamp: 2018.03.30-03:33:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const fs = require('fs'),
-      path = require('path'),
-      fnguard = require('fnguard'),
-      detective = require('detective'),
-      detectivees6 = require('detective-es6'),
-      immutable = require('immutable'),
-      moduletype = require('moduletype'),
-      resolveuid = require('resolveuid'),
-      resolvewithplus = require('resolvewithplus'),
+import fs from 'fs'
+import path from 'path'
+import fnguard from 'fnguard'
+import detective from 'detective'
+import detectivees6 from 'detective-es6'
+import immutable from 'immutable'
+import moduletype from 'moduletype'
+import resolveuid from 'resolveuid'
+import resolvewithplus from 'resolvewithplus'
     
-      depgraph_edge = require('./depgraph_edge');
+import depgraph_edge from './depgraph_edge.js'
 
-module.exports = (o => {
+export default (o => {
 
   // 'in'  are dependents
   // 'out' are dependencies

@@ -1,13 +1,12 @@
 // Timestamp: 2015.12.15-07:30:22 (last modified)
 
-var fileb = require('./fileb'),
-    filea = require('./filea'),
-    filec = require('./filec'),
-    resolveuid = require('resolveuid'),
-    bowermodule = require('bowermodule'),        
-    filed = require('./dir/filed.js');
+import fileb from './fileb.js'
+import filea from './filea.js'
+import filec from './filec.js'
+import resolveuid from 'resolveuid'
+import filed from './dir/filed.js'
 
-var root = module.exports = {
+export default {
   name : 'root',
   filea : filea,
   fileb : fileb,

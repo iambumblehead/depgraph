@@ -2,10 +2,10 @@
 // Timestamp: 2018.03.29-05:44:05 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const immutable = require('immutable'),
-      depgraph_node = require('./depgraph_node');
+import immutable from 'immutable'
+import depgraph_node from './depgraph_node.js'
 
-module.exports = (function (o) {
+export default (function (o) {
   o.get = function (node) {
     return immutable.Map({});
   };

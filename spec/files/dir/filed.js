@@ -1,8 +1,8 @@
 // Timestamp: 2015.07.09-12:01:29 (last modified)
 
-var filec = require('./../filec');
+import filec from './../filec.js'
 
-var filed = module.exports = {
+export default {
   filec : filec,  
   name  : 'filed'
 };

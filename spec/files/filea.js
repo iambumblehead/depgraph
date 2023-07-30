@@ -1,8 +1,8 @@
 // Timestamp: 2015.07.09-12:01:09 (last modified)
 
-var fileb = require('./fileb');
+import fileb from './fileb.js'
 
-var filea = module.exports = {
+export default {
   name  : 'filea',
   fileb : fileb
 };

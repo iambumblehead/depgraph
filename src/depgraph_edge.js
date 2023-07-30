@@ -2,9 +2,9 @@
 // Timestamp: 2018.03.29-05:44:21 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-const immutable = require('immutable');
+import immutable from 'immutable';
 
-module.exports = (function (o) {
+export default (function (o) {
   o.get = function (refname, uid) {
     return immutable.Map({
       refname : refname,

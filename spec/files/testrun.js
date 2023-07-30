@@ -2,8 +2,8 @@
 // Timestamp: 2015.12.15-07:31:44 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var depgraph = require('../../src/depgraph'),
-    archy = require('archy');
+import depgraph from '../../src/depgraph.js'
+import archy from 'archy'
 
 depgraph.graph.getfromseedfile('./test/files/root.js', {}, function (err, graph) {
   console.log(JSON.stringify(graph, null, '\t'));
