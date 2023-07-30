@@ -11,6 +11,7 @@ import immutable from 'immutable'
 import moduletype from 'moduletype'
 import resolveuid from 'resolveuid'
 import resolvewithplus from 'resolvewithplus'
+import detectivetypescript from 'detective-typescript'
     
 import depgraph_edge from './depgraph_edge.js'
 
@@ -100,7 +101,7 @@ export default (o => {
           }
         }));
     } else if (/.ts$/.test(filepath)) {
-      detectivetype = require('detective-typescript');
+      detectivetype = detectivetypescript
     }
 
     return detectivetype;
@@ -185,7 +186,6 @@ export default (o => {
       return o.walkbegin(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
     });
   };
-  
+
   return o;
-  
 })({});

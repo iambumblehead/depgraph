@@ -7,6 +7,7 @@ import resolveuid from 'resolveuid'
 import filed from './dir/filed.js'
 
 export default {
+  resolveuid,
   name : 'root',
   filea : filea,
   fileb : fileb,

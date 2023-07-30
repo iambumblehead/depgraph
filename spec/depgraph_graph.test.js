@@ -12,7 +12,7 @@ test("should return an empty object", () => {
 
   var graph = depgraph_graph.get();
   
-  assert.true(typeof graph === 'object')
+  assert.strictEqual(typeof graph, 'object')
 });
 
 test("should add the given node to the given graph", () => {
@@ -25,7 +25,7 @@ test("should add the given node to the given graph", () => {
   
   var graphfin = depgraph_graph.setnode(graph, node);
 
-  assert.true(
+  assert.ok(
     immutable.is(graphfin.get(node.get('uid')), node)
   );
 });
@@ -43,7 +43,7 @@ test("should add the given node to the given graph, with edge to existing pnode"
   var graph = depgraph_graph.setnode(depgraph_graph.get(), pnode);
   var graphfin = depgraph_graph.setnode(graph, node, pnode, './parent');
 
-  assert.true(
+  assert.ok(
     graphfin.get(node.get('uid')).get('filepath') === node.get('filepath') &&
       graphfin.get(node.get('uid')).get('inarr').get(0).get('refname') === './parent' &&
       graphfin.get(pnode.get('uid')).get('outarr').get(0).get('refname') === './parent'      
@@ -64,7 +64,7 @@ test("should throw error if existing pnode not found in graph", async () => {
 
   await assert.rejects(async () => {
     depgraph_graph.setnode(graph, node, pnode, './parent');
-  }).toThrow({
+  }, {
     message: 'pnode not found'
   });
 });

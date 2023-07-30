@@ -38,6 +38,7 @@
   "scripts": {
     "start": "node spec/files/testrun.js",
     "test": "npm start && node --test",
+    "test": "node --test",
     "prepublishOnly": "npm start && npm test"
   }
 }

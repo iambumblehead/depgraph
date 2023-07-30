@@ -11,7 +11,7 @@ test("should have accessible namespaces for graph, tree, node and edge", () => {
   ['graph',
    'node',
    'edge',
-   'tree'].map(name => assert.true( name in depgraph ));
+   'tree'].map(name => assert.ok( name in depgraph ));
 });
 
 
