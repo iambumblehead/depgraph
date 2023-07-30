@@ -70,13 +70,13 @@ test("should throw error if existing pnode not found in graph", async () => {
 });
 
 test('[./spec/files/root.js] should return a graph with nine nodes', donefn => {
-
   var filepath = './spec/files/root.js';
 
   depgraph_graph.getfromseedfile(filepath, {}, (err, graph) => {
     var arr = depgraph_graph.getdeparr(graph);
 
-    assert.strictEqual(arr.length, 8);
+
+    assert.strictEqual(arr.length, 7);
   });
 });
 

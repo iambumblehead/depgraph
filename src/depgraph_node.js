@@ -3,6 +3,7 @@
 // Author(s): bumblehead <chris@bumblehead.com>
 
 import fs from 'fs'
+import url from 'node:url'
 import path from 'path'
 import fnguard from 'fnguard'
 import detective from 'detective'
@@ -41,7 +42,9 @@ export default (o => {
   o.get_fromfilepath = (filepath, fn) => {
     fnguard.isstr(filepath).isfn(fn);
 
-    filepath = path.resolve(filepath);
+    filepath = filepath.startsWith('file://')
+      ? url.fileURLToPath(filepath)
+      : path.resolve(filepath);
 
     fs.readFile(filepath, 'utf-8', (err, filestr) => {
       err ? fn(err) : fn(null, o.get(filepath, filestr));
@@ -50,7 +53,6 @@ export default (o => {
 
   o.get_fromfilepathrel = (filepath, opts, fn) => {
     var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
-
     if (!fullpath) {
       return fn('dep not found, "' + filepath + '": ' + fullpath);
     }

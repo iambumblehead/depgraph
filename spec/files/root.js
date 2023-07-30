@@ -2,7 +2,7 @@
 
 import fileb from './fileb.js'
 import filea from './filea.js'
-import filec from './filec.js'
+import filec from './filec/index.js'
 import resolveuid from 'resolveuid'
 import filed from './dir/filed.js'
 
