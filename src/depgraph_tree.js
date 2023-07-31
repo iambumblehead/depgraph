@@ -5,10 +5,10 @@
 // full tree construction is impossible when circular references exist, the tree
 // printed by this file provides visual-feedback for interactive development
 
-const depgraph_graph = require('./depgraph_graph'),
-      archy = require('archy');
+import depgraph_graph from './depgraph_graph.js'
+import archy from 'archy'
 
-module.exports = (function (o) {
+export default (function (o) {
   
   // compatible with substack's 'archy', which also uses label/nodes:
   //

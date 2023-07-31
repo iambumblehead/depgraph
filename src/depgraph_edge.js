@@ -2,24 +2,21 @@
 // Timestamp: 2018.03.29-05:44:21 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-const immutable = require('immutable');
+import immutable from 'immutable';
 
-module.exports = (function (o) {
-  o.get = function (refname, uid) {
-    return immutable.Map({
-      refname : refname,
-      uid     : uid
-    });
-  };
+const get = (refname, uid) => immutable.Map({
+  refname : refname,
+  uid     : uid
+});
   
-  o.issame = function (edgea, edgeb) {
-    return immutable.is(edgea, edgeb);
-  };
+const issame = (edgea, edgeb) => (
+  immutable.is(edgea, edgeb));
 
-  o.issamenot = function (edgea, edgeb) {
-    return !o.issame(edgea, edgeb);
-  };
-  
-  return o;
-  
-}({}));
+const issamenot = (edgea, edgeb) => (
+  !issame(edgea, edgeb));
+
+export default {
+  get,
+  issame,
+  issamenot
+}
