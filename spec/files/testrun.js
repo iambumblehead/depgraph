@@ -5,25 +5,30 @@
 import depgraph from '../../src/depgraph.js'
 import archy from 'archy'
 
-depgraph.graph.getfromseedfile('./test/files/root.js', {}, function (err, graph) {
-  console.log(JSON.stringify(graph, null, '\t'));
+depgraph.graph.getfromseedfile('./spec/files/root.js', {}, (err, graph) => {
+  if (err) throw new Error(err)
+  console.log(JSON.stringify(graph, null, '  '));
   console.log('\n');
 
-  depgraph.graph.getfromseedfile('./test/files/root.js', {}, function (err, graph) {
-    console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '\t'));
+  depgraph.graph.getfromseedfile('./spec/files/root.js', {}, (err, graph) => {
+    if (err) throw new Error(err)
+    console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '  '));
     console.log('\n');
 
-    depgraph.tree.getfromseedfile('./test/files/root.js', {}, function (err, tree) {
+    depgraph.tree.getfromseedfile('./spec/files/root.js', {}, (err, tree) => {
+      if (err) throw new Error(err)
       console.log(archy(tree));
       console.log('\n');      
       
-      depgraph.tree.getfromseedfilesmall('./test/files/root.js', {}, function (err, tree) {
+      depgraph.tree.getfromseedfilesmall('./spec/files/root.js', {}, (err, tree) => {
+        if (err) throw new Error(err)
         console.log(archy(tree));
         console.log('\n');              
 
-        depgraph.tree.getfromseedfilesmall('./test/files/root.js', { browser: true }, function (err, tree) {
-          console.log(archy(tree));
+        depgraph.tree.getfromseedfilesmall('./spec/files/root.js', { browser: true }, (err, tree) => {
+          if (err) throw new Error(err)
 
+          console.log(archy(tree));
         });        
       });
     });
