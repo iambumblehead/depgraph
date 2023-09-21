@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "type": "module",
   "main": "./src/depgraph.js",
@@ -20,8 +20,7 @@
     "dependency graph",
     "graph",
     "concatenate",
-    "bundle",
-    "commonjs"
+    "bundle"
   ],
   "dependencies": {
     "detective-typescript": "11.1.0",
@@ -43,7 +42,6 @@
     "start": "node spec/files/testrun.js",
     "lint": "eslint .",
     "test": "npm start && node --test",
-    "test": "node --test",
     "prepublishOnly": "npm start && npm test"
   }
 }
