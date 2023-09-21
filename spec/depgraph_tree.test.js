@@ -11,12 +11,5 @@ test('[./test/files/root.js] should print a tree', async () => {
   const filepath = './spec/files/root.js';
   const tree = await depgraph_tree.getfromseedfile(filepath, {})
 
-  console.log('tree', tree);
   assert.ok(tree)
-
-  //depgraph_tree.getfromseedfile(filepath, {}, (err, tree) => {
-    // console.log(archy(tree))
-  //  assert.ok(true)
-  //});
-
 });

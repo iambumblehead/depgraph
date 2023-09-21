@@ -16,7 +16,6 @@ const get = (label, nodes) => ({
   nodes : nodes || []
 });
 
-
 // full tree impossible when circular reference
 //
 const getfromgraph = (graph, gnode, uidarr) => {

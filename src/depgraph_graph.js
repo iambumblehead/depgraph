@@ -8,8 +8,8 @@ import depgraph_node from './depgraph_node.js'
 const get = () => immutable.Map({});
 
 const setnode = (graph, node, pnode, refname) => {
-  var uid = node.get('uid'),
-      graph_final = graph.has(uid) ? graph : graph.set(uid, node);    
+  const uid = node.get('uid');
+  const graph_final = graph.has(uid) ? graph : graph.set(uid, node);    
 
   if (pnode && refname) {
     if (!graph.has(pnode.get('uid'))) {
@@ -31,8 +31,8 @@ const getnoderoot = graph => (
 
 // why parent node and child node...
 const setnodeedge = (graph, cnode, pnode, refname) => {
-  var graph_cnode = getnode(graph, cnode),
-      graph_pnode = getnode(graph, pnode);
+  const graph_cnode = getnode(graph, cnode)
+  const graph_pnode = getnode(graph, pnode)
   
   return graph
     .set(cnode.get('uid'),

@@ -42,30 +42,22 @@ const get_fromfilepath = async (filepath) => {
     ? url.fileURLToPath(filepath)
     : path.resolve(filepath);
 
-  const filestr = await fs.readFile(filepath, { encoding: 'utf8' })
-
-  return get(filepath, filestr)
+  return get(filepath, await fs.readFile(filepath, { encoding: 'utf8' }))
 };
 
-const get_fromfilepathrel = async (filepath, opts, fn) => {
-  return new Promise(async (resolve, reject) => {
+const get_fromfilepathrel = async (filepath, opts) => {
   var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
-  if (!fullpath) {
-    return reject('dep not found, "' + filepath + '": ' + fullpath);
-  }
+  if (!fullpath)
+    throw new Error('dep not found, "' + filepath + '": ' + fullpath);
 
-
-    const node = await get_fromfilepath(fullpath)
-
-    return resolve(node)
-  })
+  return get_fromfilepath(fullpath)
 };
 
-const get_arrfromfilepathrel = async (filepatharr, opts, fn) => {
+const get_arrfromfilepathrel = async (filepatharr, opts) => {
   const nodesarr = [];
   
   (async function nextdep (filepatharr, x, prepend) {
-    if (!x--) return fn(null, nodesarr);
+    if (!x--) return nodesarr;
 
     nodesarr.push(await get_fromfilepathrel(filepatharr[x], opts))
       
@@ -121,9 +113,7 @@ const ndetective = node => {
 };
 
 // walks node childs
-const walk = async (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
-  return new Promise(async (resolve, reject) => {
-
+const walk = async (node, opts, accumstart, onnodefn, deparr) => {
   var nodefilepath = node.get('filepath'),
       depfilepath,
       skipdeparr = opts.skipdeparr || [],
@@ -147,31 +137,21 @@ const walk = async (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
 
     const depnode = await get_fromfilepath(depfilepath)
     const accum = await onnodefn(depnode, accumstart,  node, deparr[0])
-    const res = await walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
 
-    return resolve(res)
+    return walk(node, opts, accum, onnodefn, deparr.slice(1));
   } else {
-    oncompletefn(null, accumstart);
+    return accumstart
   }
-  })
 };
 
 // walks node childs, recursive
 const walkrecursive = async (node, opts, accumstart, iswalkcontinuefn, accumfn) => {
-  return new Promise(async (resolve, reject) => {
-  await walk(node, opts, accumstart, async (node, accumstart, pnode, refname) => {
+  return walk(node, opts, accumstart, async (node, accumstart, pnode, refname) => {
     var accum = accumfn(accumstart, node, pnode, refname);
 
-    if (iswalkcontinuefn(accumstart, node, pnode, refname)) {
-      return await walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn);
-    } else {
-      return accum
-    }
-  }, ((err, res) => {
-    if (err) reject(err)
-
-    resolve(res)    
-  }));
+    return iswalkcontinuefn(accumstart, node, pnode, refname)
+      ? walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn)
+      : accum
   })
 };
 

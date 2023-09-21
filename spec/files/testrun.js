@@ -5,33 +5,36 @@
 import depgraph from '../../src/depgraph.js'
 import archy from 'archy'
 
-depgraph.graph.getfromseedfile('./spec/files/root.js', {}, (err, graph) => {
-  if (err) throw new Error(err)
+const graphroot = async () => {
+  const graph = await depgraph.graph.getfromseedfile('./spec/files/root.js', {})
+
   console.log(JSON.stringify(graph, null, '  '));
   console.log('\n');
+}
 
-  depgraph.graph.getfromseedfile('./spec/files/root.js', {}, (err, graph) => {
-    if (err) throw new Error(err)
-    console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '  '));
-    console.log('\n');
+const treeroot = async () => {
+  const tree = await depgraph.tree.getfromseedfile('./spec/files/root.js', {})
 
-    depgraph.tree.getfromseedfile('./spec/files/root.js', {}, (err, tree) => {
-      if (err) throw new Error(err)
-      console.log(archy(tree));
-      console.log('\n');      
-      
-      depgraph.tree.getfromseedfilesmall('./spec/files/root.js', {}, (err, tree) => {
-        if (err) throw new Error(err)
-        console.log(archy(tree));
-        console.log('\n');              
+  console.log(archy(tree));
+  console.log('\n');
+}
 
-        depgraph.tree.getfromseedfilesmall('./spec/files/root.js', { browser: true }, (err, tree) => {
-          if (err) throw new Error(err)
+const treerootsmall = async () => {
+  const tree = await depgraph.tree.getfromseedfilesmall('./spec/files/root.js', {})
 
-          console.log(archy(tree));
-        });        
-      });
-    });
-  });
-});
+  console.log(archy(tree));
+  console.log('\n');
+};
 
+const treerootbrowsersmall = async () => {
+  const tree = await depgraph.tree.getfromseedfilesmall('./spec/files/root.js', { browser: true })
+
+  console.log(archy(tree));
+}
+
+(async () => {
+  await graphroot(),
+  await treeroot(),
+  await treerootsmall(),
+  await treerootbrowsersmall()
+})()
