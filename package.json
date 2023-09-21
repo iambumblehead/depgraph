@@ -36,7 +36,6 @@
     "detective-es6": "^4.0.1",
     "fnguard": "~0.6.5",
     "detective": "^5.2.1",
-    "resolve": "^1.22.2",
     "resolveuid": "^0.0.3",
     "resolvewithplus": "^2.0.4",
     "moduletype": "^0.0.8",
