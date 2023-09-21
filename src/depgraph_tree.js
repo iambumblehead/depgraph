@@ -60,7 +60,7 @@ const filtered = (tree, arr) => {
         .filter(n => n !== undefined))
   }
 
-  return null
+  return undefined
 }
 
 export default {
