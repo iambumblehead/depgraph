@@ -2,7 +2,7 @@
 // Timestamp: 2018.03.30-03:33:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-import fs from 'fs'
+import fs from 'node:fs/promises'
 import url from 'node:url'
 import path from 'path'
 import fnguard from 'fnguard'
@@ -35,40 +35,41 @@ const get_fromjs = js => immutable.Map(js).merge(
     inarr  : immutable.List(js.inarr.map(immutable.Map) || [])
   }));
 
-const get_fromfilepath = (filepath, fn) => {
-  fnguard.isstr(filepath).isfn(fn);
+const get_fromfilepath = async (filepath) => {
+  fnguard.isstr(filepath);
 
   filepath = filepath.startsWith('file://')
     ? url.fileURLToPath(filepath)
     : path.resolve(filepath);
 
-  fs.readFile(filepath, 'utf-8', (err, filestr) => {
-    err ? fn(err) : fn(null, get(filepath, filestr));
-  });      
+  const filestr = await fs.readFile(filepath, { encoding: 'utf8' })
+
+  return get(filepath, filestr)
 };
 
-const get_fromfilepathrel = (filepath, opts, fn) => {
+const get_fromfilepathrel = async (filepath, opts, fn) => {
+  return new Promise(async (resolve, reject) => {
   var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
   if (!fullpath) {
-    return fn('dep not found, "' + filepath + '": ' + fullpath);
+    return reject('dep not found, "' + filepath + '": ' + fullpath);
   }
-  
-  get_fromfilepath(fullpath, fn);
+
+
+    const node = await get_fromfilepath(fullpath)
+
+    return resolve(node)
+  })
 };
 
-const get_arrfromfilepathrel = (filepatharr, opts, fn) => {
-  var nodesarr = [];
+const get_arrfromfilepathrel = async (filepatharr, opts, fn) => {
+  const nodesarr = [];
   
-  (function nextdep (filepatharr, x, prepend) {
+  (async function nextdep (filepatharr, x, prepend) {
     if (!x--) return fn(null, nodesarr);
 
-    get_fromfilepathrel(filepatharr[x], opts, (err, res) => {
-      if (err) return fn(err);
-
-      nodesarr.push(res);
+    nodesarr.push(await get_fromfilepathrel(filepatharr[x], opts))
       
-      nextdep(filepatharr, x);        
-    });
+    return nextdep(filepatharr, x);        
   }(filepatharr, filepatharr.length));
 };
 
@@ -120,7 +121,9 @@ const ndetective = node => {
 };
 
 // walks node childs
-const walk = (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
+const walk = async (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
+  return new Promise(async (resolve, reject) => {
+
   var nodefilepath = node.get('filepath'),
       depfilepath,
       skipdeparr = opts.skipdeparr || [],
@@ -139,48 +142,49 @@ const walk = (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
       !resolvewithplus.iscoremodule(deparr[0])) {
 
     if (!(depfilepath = resolvewithplus(deparr[0], nodefilepath, opts))) {
-      return oncompletefn('dep not found, "' + deparr[0] + '": ' + nodefilepath);
+      throw new Error('dep not found, "' + deparr[0] + '": ' + nodefilepath);
     }
 
-    get_fromfilepath(depfilepath, (err, depnode) => {
-      if (err) return oncompletefn(err);
+    const depnode = await get_fromfilepath(depfilepath)
+    const accum = await onnodefn(depnode, accumstart,  node, deparr[0])
+    const res = await walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
 
-      onnodefn(depnode, accumstart,  node, deparr[0], (err, accum) => {
-        if (err) return oncompletefn(err);
-
-        walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
-      });
-    });
+    return resolve(res)
   } else {
     oncompletefn(null, accumstart);
   }
+  })
 };
 
 // walks node childs, recursive
-const walkrecursive = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
-  walk(node, opts, accumstart, function onnodefn (node, accumstart, pnode, refname, nextfn) {    
+const walkrecursive = async (node, opts, accumstart, iswalkcontinuefn, accumfn) => {
+  return new Promise(async (resolve, reject) => {
+  await walk(node, opts, accumstart, async (node, accumstart, pnode, refname) => {
     var accum = accumfn(accumstart, node, pnode, refname);
 
     if (iswalkcontinuefn(accumstart, node, pnode, refname)) {
-      walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, nextfn);
+      return await walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn);
     } else {
-      nextfn(null, accum);
+      return accum
     }
-  }, accumcompletefn);
+  }, ((err, res) => {
+    if (err) reject(err)
+
+    resolve(res)    
+  }));
+  })
 };
 
-const walkbegin = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
+const walkbegin = async (node, opts, accumstart, iswalkcontinuefn, accumfn) => {
   var accum = accumfn(accumstart, node, null);
-  
-  walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
+
+  return walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn)
 };
 
-const walkbeginfile = (filepath, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn) => {
-  get_fromfilepath(filepath, (err, node) => {
-    if (err) return accumcompletefn(err);
+const walkbeginfile = async (filepath, opts, accum, iswalkcontinuefn, accumfn) => {
+  const node = await get_fromfilepath(filepath)
 
-    return walkbegin(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
-  });
+  return walkbegin(node, opts, accum, iswalkcontinuefn, accumfn)
 };
 
 export default {

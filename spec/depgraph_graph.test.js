@@ -7,7 +7,7 @@ import assert from 'node:assert/strict'
 import depgraph_graph from '../src/depgraph_graph.js'
 import depgraph_node from '../src/depgraph_node.js'
 import immutable from 'immutable'
-
+/*
 test("should return an empty object", () => {
 
   var graph = depgraph_graph.get();
@@ -68,16 +68,15 @@ test("should throw error if existing pnode not found in graph", async () => {
     message: 'pnode not found'
   });
 });
+*/
+test('[./spec/files/root.js] should return a graph with nine nodes', async () => {
+  const filepath = './spec/files/root.js';
+  const graph = await depgraph_graph.getfromseedfile(filepath, {})
+  const arr = depgraph_graph.getdeparr(graph);
 
-test('[./spec/files/root.js] should return a graph with nine nodes', donefn => {
-  var filepath = './spec/files/root.js';
+  console.log('arr', JSON.parse(JSON.stringify(arr)))
 
-  depgraph_graph.getfromseedfile(filepath, {}, (err, graph) => {
-    var arr = depgraph_graph.getdeparr(graph);
-
-
-    assert.strictEqual(arr.length, 7);
-  });
+  assert.strictEqual(arr.length, 7);
 });
 
 /*

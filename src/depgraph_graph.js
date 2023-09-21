@@ -51,8 +51,8 @@ const setnodeedge = (graph, cnode, pnode, refname) => {
 //   else
 //     return graph
 //
-const getfromseedfile = (filepath, opts, fn) => {
-  depgraph_node.walkbeginfile(
+const getfromseedfile = async (filepath, opts) => {
+  return depgraph_node.walkbeginfile(
     filepath,
     opts,
     get(), // empty new graph to start
@@ -61,7 +61,7 @@ const getfromseedfile = (filepath, opts, fn) => {
     },
     function accumfn(graph, node, pnode, refname) {
       return setnode(graph, node, pnode, refname);
-    }, fn);
+    })
 };
 
 const getdeparr = (graph, opts, node, narr, parr) => {
