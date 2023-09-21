@@ -47,7 +47,7 @@ _result_
       "refname": "./filec",
       "uid": "depgraph-0.0.6:~/test/files/filec/index.js"
     },{
-	  "refname": "resolveuid",
+      "refname": "resolveuid",
       "uid": "resolveuid-0.0.2:~/index.js"
     },{
       "refname": "./dir/filed.js",
@@ -283,7 +283,7 @@ depgraph-0.0.6:~/test/files/root.js
 
 # Modifiers
 
-The option, `{ browser : true, ismodule : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found.
+The option, `{ browser: true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json, like [browserify does][5]. When `{ iscircular: false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found.
 
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
