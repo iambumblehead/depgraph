@@ -11,4 +11,4 @@ test("should return a node with given filepath and content", () => {
 
   assert.strictEqual(node.get('filepath'), 'test_filepath')
   assert.strictEqual(node.get('content'), 'test_content')
-});
+})

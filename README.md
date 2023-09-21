@@ -3,9 +3,9 @@ depgraph
 **(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-depgraph returns a dependency graph for a javascript module. It resolves ES6 modules, CommonJS modules and Typescript files using [resolvewithplus][3].
+depgraph returns a dependency graph for a javascript module. It resolves ESM, CommonJS and Typescript modules using [resolvewithplus][3].
 
-depgraph is similar to [module-deps][2], a popular package by Substack and it uses some of the same dependencies as module-deps.
+depgraph is similar to [module-deps][2] and uses some of the same dependencies.
 
 
 [0]: http://www.bumblehead.com                          "bumblehead"
@@ -24,9 +24,9 @@ A sample graph, tree and dependency-ordered array are seen using example calls b
 For each graph node, "inarr" references dependent nodes and "outarr" references depedency nodes.
 
 ```javascript
-depgraph.graph.getfromseedfile('./test/files/root.js', {}, (err, graph) => {
-  console.log(JSON.stringify(graph, null, '\t'));
-});
+const graph = await depgraph.graph.getfromseedfile('./test/files/root.js')
+
+console.log(JSON.stringify(graph, null, '\t'))
 ```
 
 _result_
@@ -137,9 +137,9 @@ _result_
 The graph is used to construct a dependency-ordered array.
 
 ```javascript
-depgraph.graph.getfromseedfile('./test/files/root.js', (err, graph) => {
-  console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '\t'));
-});
+const graph = await depgraph.graph.getfromseedfile('./test/files/root.js')
+
+console.log(JSON.stringify(depgraph.graph.getdeparr(graph), null, '\t'))
 ```
 
 _result_
@@ -239,14 +239,14 @@ _result_
 
 # Tree
 
-The graph is used to generate a tree in the [archy format][4]. Full tree construction is prohibited by circular dependencies so each tree is an incomplete visual aid.
+Trees are generated from the graph usi the [archy format][4]. Full tree construction may be prohibited by circular cjs dependencies.
 
 The default tree may render a leaf multiple times, but will render the children once only.
 
 ```javascript
-depgraph.tree.getfromseedfile('./test/files/root.js', (err, tree) => {
-  console.log(archy(tree));
-});
+const tree = await depgraph.tree.getfromseedfile('./test/files/root.js')
+
+console.log(archy(tree));
 ```
 
 _result_
@@ -265,9 +265,9 @@ depgraph-0.0.6:~/test/files/root.js
 The 'small' tree renders each leaf once only.
 
 ```javascript
-depgraph.tree.getfromseedfilesmall('./test/files/root.js', {}, (err, tree) => {
-  console.log(archy(tree));
-});
+const tree = await depgraph.tree.getfromseedfilesmall('./test/files/root.js')
+
+console.log(archy(tree))
 ```
 
 _result_
@@ -283,7 +283,7 @@ depgraph-0.0.6:~/test/files/root.js
 
 # Modifiers
 
-The 'empty' object used in the examples is for configuration. The configuration option, `{ browser : true, ismodule : true }` directs depgraph to use the 'module' or 'browser' rather than 'main' property in a package.json or bower.json file, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown for circular dependencies found.
+The option, `{ browser : true, ismodule : true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json, like [browserify does][5]. When `{ iscircular : false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found.
 
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 

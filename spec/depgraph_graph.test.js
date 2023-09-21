@@ -9,80 +9,72 @@ import depgraph_node from '../src/depgraph_node.js'
 import immutable from 'immutable'
 
 test("should return an empty object", () => {
-
-  var graph = depgraph_graph.get();
+  const graph = depgraph_graph.get()
   
   assert.strictEqual(typeof graph, 'object')
-});
+})
 
 test("should add the given node to the given graph", () => {
-  var node = depgraph_node.get(
+  const graph = depgraph_graph.get()
+  const node = depgraph_node.get(
     'test_filepath',
     'test_content'
-  );
+  )
   
-  var graph = depgraph_graph.get();
-  
-  var graphfin = depgraph_graph.setnode(graph, node);
+  const graphfin = depgraph_graph.setnode(graph, node)
 
   assert.ok(
     immutable.is(graphfin.get(node.get('uid')), node)
-  );
-});
+  )
+})
 
-test("should add the given node to the given graph, with edge to existing pnode", () => {
-  var node = depgraph_node.get(
+test("should add the node to graph, with edge to existing pnode", () => {
+  const node = depgraph_node.get(
     'test_filepath',
-    'test_content'
-  );
-  var pnode = depgraph_node.get(
+    'test_content')
+  const pnode = depgraph_node.get(
     'parent_filepath',
-    'parent_content'
-  );
-  
-  var graph = depgraph_graph.setnode(depgraph_graph.get(), pnode);
-  var graphfin = depgraph_graph.setnode(graph, node, pnode, './parent');
+    'parent_content')
+  const parent = './parent'
+  const graph = depgraph_graph.setnode(depgraph_graph.get(), pnode)
+  const graphfin = depgraph_graph.setnode(graph, node, pnode, './parent')
+
+  const graphnode = graphfin.get(node.get('uid'))
+  const graphpnode = graphfin.get(pnode.get('uid'))
 
   assert.ok(
-    graphfin.get(node.get('uid')).get('filepath') === node.get('filepath') &&
-      graphfin.get(node.get('uid')).get('inarr').get(0).get('refname') === './parent' &&
-      graphfin.get(pnode.get('uid')).get('outarr').get(0).get('refname') === './parent'      
-  );
-});
+    graphnode.get('filepath') === node.get('filepath')
+      && graphnode.get('inarr').get(0).get('refname') === parent
+      && graphpnode.get('outarr').get(0).get('refname') === parent)
+})
 
 test("should throw error if existing pnode not found in graph", async () => {
-  var node = depgraph_node.get(
+  const graph = depgraph_graph.get()
+  const node = depgraph_node.get(
     'test_filepath',
-    'test_content'
-  );
-  var pnode = depgraph_node.get(
+    'test_content')
+  const pnode = depgraph_node.get(
     'parent_filepath',
-    'parent_content'
-  );
-  
-  var graph = depgraph_graph.get();
+    'parent_content')
 
   await assert.rejects(async () => {
-    depgraph_graph.setnode(graph, node, pnode, './parent');
+    depgraph_graph.setnode(graph, node, pnode, './parent')
   }, {
     message: 'pnode not found'
-  });
-});
+  })
+})
 
-test('[./spec/files/root.js] should return a graph with nine nodes', donefn => {
-  var filepath = './spec/files/root.js';
+test('[./spec/files/root.js] should return graph with nine nodes', async () => {
+  const filepath = './spec/files/root.js'
+  const graph = await depgraph_graph.getfromseedfile(filepath, {})
+  const arr = depgraph_graph.getdeparr(graph)
 
-  depgraph_graph.getfromseedfile(filepath, {}, (err, graph) => {
-    var arr = depgraph_graph.getdeparr(graph);
-
-
-    assert.strictEqual(arr.length, 7);
-  });
-});
+  assert.strictEqual(arr.length, 7)
+})
 
 /*
 describe('depgraph_graph.getdeparr', () => {
-test('[./spec/files/root.js] should return nodes in the correct order', donefn => {
+test('[./spec/files/root.js] should return nodes in correct order', donefn => {
 
     var filepath = './spec/files/root.js';
 

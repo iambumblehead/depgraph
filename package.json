@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "license": "MIT",
   "type": "module",
   "main": "./src/depgraph.js",
@@ -11,7 +11,7 @@
   "description": "generate a full dependency graph or tree of nodes from a given file",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iambumblehead/depgraph.git"
+    "url": "git+https://github.com/iambumblehead/depgraph.git"
   },
   "keywords": [
     "dependency",
@@ -20,8 +20,7 @@
     "dependency graph",
     "graph",
     "concatenate",
-    "bundle",
-    "commonjs"
+    "bundle"
   ],
   "dependencies": {
     "detective-typescript": "11.1.0",
@@ -30,15 +29,19 @@
     "detective": "^5.2.1",
     "resolve": "^1.22.2",
     "resolveuid": "^0.0.3",
-    "resolvewithplus": "^2.0.2",
+    "resolvewithplus": "^2.0.4",
     "moduletype": "^0.0.8",
     "immutable": "^4.3.1",
     "archy": "1.0.x"
   },
+  "devDependencies": {
+    "eslint": "^8.46.0",
+    "eslint-plugin-markdown": "^3.0.1"
+  },
   "scripts": {
     "start": "node spec/files/testrun.js",
+    "lint": "eslint .",
     "test": "npm start && node --test",
-    "test": "node --test",
     "prepublishOnly": "npm start && npm test"
   }
 }

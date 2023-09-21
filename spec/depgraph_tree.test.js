@@ -7,12 +7,9 @@ import assert from 'node:assert/strict'
 
 import depgraph_tree from '../src/depgraph_tree.js'
 
-test('[./test/files/root.js] should print a tree', () => {
+test('[./test/files/root.js] should print a tree', async () => {
+  const filepath = './spec/files/root.js'
+  const tree = await depgraph_tree.getfromseedfile(filepath, {})
 
-  var filepath = './spec/files/root.js';
-
-  depgraph_tree.getfromseedfile(filepath, {}, (err, tree) => {
-    // console.log(archy(tree))
-    assert.ok(true)
-  });
-});
+  assert.ok(tree)
+})

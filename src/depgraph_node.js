@@ -2,7 +2,7 @@
 // Timestamp: 2018.03.30-03:33:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-import fs from 'fs'
+import fs from 'node:fs/promises'
 import url from 'node:url'
 import path from 'path'
 import fnguard from 'fnguard'
@@ -21,73 +21,66 @@ import depgraph_edge from './depgraph_edge.js'
 //
 // nodes with 'in' degree of 0 are tree root nodes
 const get = (filepath, filecontent, uid) => immutable.Map({
-  module   : moduletype.is(filecontent),
-  content  : filecontent,
-  filepath : filepath,
-  uid      : uid || resolveuid(filepath),
-  inarr    : immutable.List(),
-  outarr   : immutable.List()
-});
+  module: moduletype.is(filecontent),
+  content: filecontent,
+  filepath: filepath,
+  uid: uid || resolveuid(filepath),
+  inarr: immutable.List(),
+  outarr: immutable.List()
+})
 
 const get_fromjs = js => immutable.Map(js).merge(
   immutable.Map({
-    outarr : immutable.List(js.outarr.map(immutable.Map) || []),
-    inarr  : immutable.List(js.inarr.map(immutable.Map) || [])
-  }));
+    outarr: immutable.List(js.outarr.map(immutable.Map) || []),
+    inarr: immutable.List(js.inarr.map(immutable.Map) || [])
+  }))
 
-const get_fromfilepath = (filepath, fn) => {
-  fnguard.isstr(filepath).isfn(fn);
+const get_fromfilepath = async filepath => {
+  fnguard.isstr(filepath)
 
   filepath = filepath.startsWith('file://')
     ? url.fileURLToPath(filepath)
-    : path.resolve(filepath);
+    : path.resolve(filepath)
 
-  fs.readFile(filepath, 'utf-8', (err, filestr) => {
-    err ? fn(err) : fn(null, get(filepath, filestr));
-  });      
-};
+  return get(filepath, await fs.readFile(filepath, { encoding: 'utf8' }))
+}
 
-const get_fromfilepathrel = (filepath, opts, fn) => {
-  var fullpath = resolvewithplus(filepath, '.' + path.sep, opts);
-  if (!fullpath) {
-    return fn('dep not found, "' + filepath + '": ' + fullpath);
-  }
+const get_fromfilepathrel = async (filepath, opts) => {
+  var fullpath = resolvewithplus(filepath, '.' + path.sep, opts)
+  if (!fullpath)
+    throw new Error('dep not found, "' + filepath + '": ' + fullpath)
+
+  return get_fromfilepath(fullpath)
+}
+
+const get_arrfromfilepathrel = async (filepatharr, opts) => {
+  const nodesarr = []
   
-  get_fromfilepath(fullpath, fn);
-};
+  return (async function nextdep (filepatharr, x) {
+    if (!x--) return nodesarr
 
-const get_arrfromfilepathrel = (filepatharr, opts, fn) => {
-  var nodesarr = [];
-  
-  (function nextdep (filepatharr, x, prepend) {
-    if (!x--) return fn(null, nodesarr);
-
-    get_fromfilepathrel(filepatharr[x], opts, (err, res) => {
-      if (err) return fn(err);
-
-      nodesarr.push(res);
+    nodesarr.push(await get_fromfilepathrel(filepatharr[x], opts))
       
-      nextdep(filepatharr, x);        
-    });
-  }(filepatharr, filepatharr.length));
-};
+    return nextdep(filepatharr, x)
+  }(filepatharr, filepatharr.length))
+}
 
 const setedge = (node, uid, refname, edgename) => {
-  var edge = depgraph_edge.get(refname, uid);
+  var edge = depgraph_edge.get(refname, uid)
 
-  return node.set(edgename, node.get(edgename).filter((inedge) => (
+  return node.set(edgename, node.get(edgename).filter(inedge => (
     depgraph_edge.issamenot(edge, inedge)
-  )).push(edge));
-};
+  )).push(edge))
+}
 
-const setedgein = (node, uid, refname) => 
-      setedge(node, uid, refname, 'inarr');
+const setedgein = (node, uid, refname) => (
+  setedge(node, uid, refname, 'inarr'))
 
-const setedgeout = (node, uid, refname) =>
-      setedge(node, uid, refname, 'outarr');
+const setedgeout = (node, uid, refname) => (
+  setedge(node, uid, refname, 'outarr'))
 
 const detectivetype = (node, filepath) => {
-  let dettype = detective;
+  let dettype = detective
 
   if (/.[mj]sx?$/.test(filepath)) {
     dettype = content => detectivees6(content).concat(detective(content, {
@@ -95,93 +88,82 @@ const detectivetype = (node, filepath) => {
         sourceType: 'module',
         allowImportExportEverywhere: true
       }
-    }));
+    }))
   } else if (/.ts$/.test(filepath)) {
     dettype = detectivetypescript
   }
 
-  return dettype;
-};
+  return dettype
+}
 
 // rm spread operator { ...namespace }
-const rmspread = str =>
-      str.replace(/\.\.\./g, '');
+const rmspread = str => (
+  str.replace(/\.\.\./g, ''))
 
 const ndetective = node => {
-  let filepath = node.get('filepath'),
-      dettype = detectivetype(node, filepath);
+  const filepath = node.get('filepath')
+  const dettype = detectivetype(node, filepath)
   
   try {
-    return dettype(node.get('content'));
+    return dettype(node.get('content'))
   } catch (e) {
-    console.error(e);
-    throw new Error('[!!!] error: ' + filepath);
+    console.error(e)
+    throw new Error('[!!!] error: ' + filepath)
   }
-};
+}
 
 // walks node childs
-const walk = (node, opts, accumstart, onnodefn, oncompletefn, deparr) => {
-  var nodefilepath = node.get('filepath'),
-      depfilepath,
-      skipdeparr = opts.skipdeparr || [],
-      aliasarr = opts.aliasarr || [];
+const walk = async (node, opts, accumstart, onnodefn, deparr) => {
+  var nodefilepath = node.get('filepath')
+  var depfilepath
+  var skipdeparr = opts.skipdeparr || []
+  var aliasarr = opts.aliasarr || []
 
-  deparr = deparr || ndetective(node);
+  deparr = deparr || ndetective(node)
 
   // very inefficient :)
-  aliasarr.map(([matchname, newname]) => (
+  aliasarr.map(([ matchname, newname ]) => (
     deparr = deparr.map(dep => dep === matchname ? newname : dep)
-  ));
+  ))
 
-  if (!skipdeparr
-      .some((skip) => nodefilepath.indexOf(skip) !== -1) &&
-      deparr.length && // coremodule ignored
-      !resolvewithplus.iscoremodule(deparr[0])) {
+  if (!skipdeparr.some(skip => nodefilepath.indexOf(skip) !== -1)
+      && deparr.length // coremodule ignored
+      && !resolvewithplus.iscoremodule(deparr[0])) {
 
     if (!(depfilepath = resolvewithplus(deparr[0], nodefilepath, opts))) {
-      return oncompletefn('dep not found, "' + deparr[0] + '": ' + nodefilepath);
+      throw new Error('dep not found, "' + deparr[0] + '": ' + nodefilepath)
     }
 
-    get_fromfilepath(depfilepath, (err, depnode) => {
-      if (err) return oncompletefn(err);
+    const depnode = await get_fromfilepath(depfilepath)
+    const accum = await onnodefn(depnode, accumstart,  node, deparr[0])
 
-      onnodefn(depnode, accumstart,  node, deparr[0], (err, accum) => {
-        if (err) return oncompletefn(err);
-
-        walk(node, opts, accum, onnodefn, oncompletefn, deparr.slice(1));
-      });
-    });
+    return walk(node, opts, accum, onnodefn, deparr.slice(1))
   } else {
-    oncompletefn(null, accumstart);
+    return accumstart
   }
-};
+}
 
 // walks node childs, recursive
-const walkrecursive = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
-  walk(node, opts, accumstart, function onnodefn (node, accumstart, pnode, refname, nextfn) {    
-    var accum = accumfn(accumstart, node, pnode, refname);
+const walkrecursive = async (node, opts, accumstart, iswalkcontfn, accumfn) => (
+  walk(node, opts, accumstart, async (node, accumstart, pnode, refname) => {
+    const accum = accumfn(accumstart, node, pnode, refname)
 
-    if (iswalkcontinuefn(accumstart, node, pnode, refname)) {
-      walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, nextfn);
-    } else {
-      nextfn(null, accum);
-    }
-  }, accumcompletefn);
-};
+    return iswalkcontfn(accumstart, node, pnode, refname)
+      ? walkrecursive(node, opts, accum, iswalkcontfn, accumfn)
+      : accum
+  }))
 
-const walkbegin = (node, opts, accumstart, iswalkcontinuefn, accumfn, accumcompletefn) => {
-  var accum = accumfn(accumstart, node, null);
-  
-  walkrecursive(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
-};
+const walkbegin = async (node, opts, accumstart, iswalkcontfn, accumfn) => {
+  var accum = accumfn(accumstart, node, null)
 
-const walkbeginfile = (filepath, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn) => {
-  get_fromfilepath(filepath, (err, node) => {
-    if (err) return accumcompletefn(err);
+  return walkrecursive(node, opts, accum, iswalkcontfn, accumfn)
+}
 
-    return walkbegin(node, opts, accum, iswalkcontinuefn, accumfn, accumcompletefn);
-  });
-};
+const walkbeginfile = async (filepath, opts, accum, iswalkcontfn, accumfn) => {
+  const node = await get_fromfilepath(filepath)
+
+  return walkbegin(node, opts, accum, iswalkcontfn, accumfn)
+}
 
 export default {
   get,

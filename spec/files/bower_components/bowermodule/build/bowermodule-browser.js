@@ -1,1 +1,1 @@
-var bowermodulebrowser = module.exports = {};
+module.exports = {}
