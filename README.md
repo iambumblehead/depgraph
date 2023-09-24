@@ -1,7 +1,7 @@
 depgraph
 ========
 **(c)[Bumblehead][0]** [MIT-license](#license)
-![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand3.png)
 
 depgraph returns a dependency graph for a javascript module. It resolves ESM, CommonJS and Typescript modules using [resolvewithplus][3].
 
@@ -11,7 +11,7 @@ depgraph is similar to [module-deps][2] and uses some of the same dependencies.
 [0]: http://www.bumblehead.com                          "bumblehead"
 [1]: http://facebook.github.io/immutable-js           "immutable-js"
 [2]: https://github.com/substack/module-deps           "module-deps"
-[3]: https://github.com/iambumblehead/resolvewithplus/blob/master/src/resolvewithplus.js "resolvewith"
+[3]: https://github.com/iambumblehead/resolvewithplus/blob/main/src/resolvewithplus.js "resolvewith"
 [4]: https://github.com/substack/node-archy#example     "archy tree"
 [5]: https://github.com/substack/browserify-handbook#browser-field
 
@@ -286,7 +286,7 @@ depgraph-0.0.6:~/test/files/root.js
 The option, `{ browser: true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json, like [browserify does][5]. When `{ iscircular: false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found.
 
 
- ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
+ ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand.png) 
 
 (The MIT License)
 
