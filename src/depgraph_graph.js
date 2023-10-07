@@ -1,4 +1,4 @@
-import immutable from 'immutable'
+import * as immutable from 'immutable'
 import depgraph_node from './depgraph_node.js'
 
 const get = () => immutable.Map({})
