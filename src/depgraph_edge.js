@@ -1,4 +1,4 @@
-import immutable from 'immutable'
+import * as immutable from 'immutable'
 
 const get = (refname, uid) => immutable.Map({
   refname: refname,
