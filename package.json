@@ -1,6 +1,6 @@
 {
   "name": "depgraph",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "license": "MIT",
   "type": "module",
   "main": "./src/depgraph.js",
@@ -37,7 +37,7 @@
     "fnguard": "~0.6.5",
     "detective": "^5.2.1",
     "resolveuid": "^0.0.3",
-    "resolvewithplus": "^2.1.0",
+    "resolvewithplus": "^2.1.1",
     "moduletype": "^0.0.8",
     "immutable": "^5.0.0-beta.4"
   },
