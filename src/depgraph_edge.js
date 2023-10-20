@@ -1,12 +1,12 @@
-import * as immutable from 'immutable'
+import { is, Map } from 'immutable'
 
-const get = (refname, uid) => immutable.Map({
+const get = (refname, uid) => Map({
   refname: refname,
   uid: uid
 })
   
 const issame = (edgea, edgeb) => (
-  immutable.is(edgea, edgeb))
+  is(edgea, edgeb))
 
 const issamenot = (edgea, edgeb) => (
   !issame(edgea, edgeb))

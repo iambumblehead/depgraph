@@ -8,7 +8,7 @@ import path from 'path'
 import fnguard from 'fnguard'
 import detective from 'detective'
 import detectivees6 from 'detective-es6'
-import * as immutable from 'immutable'
+import { Map, List } from 'immutable'
 import moduletype from 'moduletype'
 import resolveuid from 'resolveuid'
 import resolvewithplus from 'resolvewithplus'
@@ -20,19 +20,19 @@ import depgraph_edge from './depgraph_edge.js'
 // 'out' are dependencies
 //
 // nodes with 'in' degree of 0 are tree root nodes
-const get = (filepath, filecontent, uid) => immutable.Map({
+const get = (filepath, filecontent, uid) => Map({
   module: moduletype.is(filecontent),
   content: filecontent,
   filepath: filepath,
   uid: uid || resolveuid(filepath),
-  inarr: immutable.List(),
-  outarr: immutable.List()
+  inarr: List(),
+  outarr: List()
 })
 
-const get_fromjs = js => immutable.Map(js).merge(
-  immutable.Map({
-    outarr: immutable.List(js.outarr.map(immutable.Map) || []),
-    inarr: immutable.List(js.inarr.map(immutable.Map) || [])
+const get_fromjs = js => Map(js).merge(
+  Map({
+    outarr: List(js.outarr.map(Map) || []),
+    inarr: List(js.inarr.map(Map) || [])
   }))
 
 const get_fromfilepath = async filepath => {

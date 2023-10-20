@@ -1,7 +1,7 @@
-import * as immutable from 'immutable'
+import { Map } from 'immutable'
 import depgraph_node from './depgraph_node.js'
 
-const get = () => immutable.Map({})
+const get = () => Map({})
 
 const setnode = (graph, node, pnode, refname) => {
   const uid = node.get('uid')
