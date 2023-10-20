@@ -1,6 +1,9 @@
 depgraph
 ========
-**(c)[Bumblehead][0]** [MIT-license](#license)
+
+[![npm][9]][7] [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)][6]
+
+
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand3.png)
 
 depgraph returns a dependency graph for a javascript module. It resolves ESM, CommonJS and Typescript modules using [resolvewithplus][3].
@@ -14,6 +17,10 @@ depgraph is similar to [module-deps][2] and uses some of the same dependencies.
 [3]: https://github.com/iambumblehead/resolvewithplus/blob/main/src/resolvewithplus.js "resolvewith"
 [4]: https://github.com/substack/node-archy#example     "archy tree"
 [5]: https://github.com/substack/browserify-handbook#browser-field
+[6]: https://www.gnu.org/licenses/gpl-3.0
+[7]: https://www.npmjs.com/package/depgraph
+[9]: https://img.shields.io/npm/v/depgraph
+
 
 ---------------------------------------------------------
 
@@ -283,17 +290,7 @@ depgraph-0.0.6:~/test/files/root.js
 
 # Modifiers
 
-The option, `{ browser: true }` directs depgraph to use the 'browser' rather than 'main' property in a package.json, like [browserify does][5]. When `{ iscircular: false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found.
+When `{ iscircular: false }` is passed to `getdeparr` an error will be thrown when circular dependencies are found. All options are passed directly to the resolver, [resolvewithplus,][3] and so it is possible to specify preferred resolutions using options like `{ isbrowser: true }` and `{ priority: ['browser', 'import', ':spectype', 'default'] }`
 
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand.png) 
-
-(The MIT License)
-
-Copyright (c) [Bumblehead][0] <chris@bumblehead.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
